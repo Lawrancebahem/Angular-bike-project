@@ -11,6 +11,7 @@ export class HomeComponent implements OnInit {
   // tslint:disable-next-line:ban-types
   public imagesArray: {image: String}[] = data;
   public cities:String[] = ['Amsterdam','Amstelveen', 'Haarlem'];
+  public places:String[] = ["Leidseplein","Centraal Station", "De Dam"];
   public chosenCity;
 
   constructor() {

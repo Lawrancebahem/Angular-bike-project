@@ -4,11 +4,18 @@
   --color-black: #232323;
   --color-red: #c3363b;
   --color-white: #fffeec;
+  --color-blue: #45b3e0;
 
   --font-size: 1.2rem;
 }
 
-p, span{
+p, span, li{
   color: var(--color-black);
   font-size: var(--font-size);
+}
+
+ul{
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
 }

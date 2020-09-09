@@ -1,24 +1,22 @@
 
 <div class="grid grid--scooter-overview">
-
-  <div class="col">
-    <label>
-      <select style="width: 200px" [(ngModel)]="chosenCity">
-        <option *ngFor="let city of cities" [value]="city">
-          <div>
-            <span class="notification">
-            {{city}} <span class="badge">3</span>
-          </span>
-          </div>
-
-        </option>
-      </select>
-    </label>
-    <div class="text-center"><strong>{{chosenCity}}</strong></div>
-
+  <div>
+    <select [(ngModel)]="chosenCity">
+      <option *ngFor="let city of cities" [value]="city">
+          {{city}}
+      </option>
+    </select>
+    <ul>
+      <li class="labelPlace" *ngFor="let place of places" [value]="place">
+        <span>{{place}}</span>
+        <span class="scootersAvailable">
+          <span>45</span>
+        </span>
+      </li>
+    </ul>
   </div>
   <div>
-    <h3>{{chosenCity}}</h3>
+    <h3>{{"Scooters in " + chosenCity}}</h3>
     <section class="grid grid--half">
   <!--    <img *ngFor="let data of imagesArray" class="img&#45;&#45;scooter" src="{{data.image}}" alt="Scooter image">-->
       <div *ngFor="let data of imagesArray" class="img--scooter" style="background-image: url({{data.image}})"></div>
