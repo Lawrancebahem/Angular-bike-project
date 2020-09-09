@@ -1,1 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
+
+:root{
+  --color-black: #232323;
+  --color-red: #c3363b;
+  --color-white: #fffeec;
+
+  --font-size: 1rem;
+}
+
+p, span{
+  color: var(--color-black);
+  font-size: var(--font-size);
+}
