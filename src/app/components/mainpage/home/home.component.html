@@ -7,7 +7,7 @@
       </option>
     </select>
     <ul>
-      <li class="labelPlace" *ngFor="let place of places" [value]="place">
+      <li class="labelPlace" *ngFor="let place of getPlace(chosenCity)" [value]="place">
         <span>{{place}}</span>
         <span class="scootersAvailable">
           <span>45</span>

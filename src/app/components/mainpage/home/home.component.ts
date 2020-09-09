@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import data from '../../../../assets/data/data.json';
+import {arrayify} from "tslint/lib/utils";
 
 @Component({
   selector: 'app-home',
@@ -11,7 +12,12 @@ export class HomeComponent implements OnInit {
   // tslint:disable-next-line:ban-types
   public imagesArray: {image: String}[] = data;
   public cities:String[] = ['Amsterdam','Amstelveen', 'Haarlem'];
-  public places:String[] = ["Leidseplein","Centraal Station", "De Dam"];
+  public arrayOfPlaces:any[] = [];
+  // @ts-ignore
+  public places:String[] =
+    [{city:'Amsterdam',place:["Leidsplein","Centraal","De Dam"],},
+      {city:"Amstelveen",place:["Delf landlaan plein","Handbalstraat"]},
+      {city:"Haarlem",place:["Jan straat", "Wester park"]}];
   public chosenCity;
 
   constructor() {
@@ -21,5 +27,22 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     // @ts-ignore
     // @ts-ignore
+  }
+
+  /**
+   * To get the places of the chosen city
+   * @param clickedCity
+   */
+  getPlace(clickedCity:String){
+    this.arrayOfPlaces = [];
+    this.places.forEach((value, x)=>{
+      if (value.city === clickedCity){
+        value.place.forEach((place, p)=>{
+          console.log(place);
+          this.arrayOfPlaces.push(place);
+        })
+      }
+    })
+    return this.arrayOfPlaces;
   }
 }
