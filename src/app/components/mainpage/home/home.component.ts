@@ -14,7 +14,9 @@ export class HomeComponent implements OnInit {
   public cities:String[] = ['Amsterdam','Amstelveen', 'Haarlem'];
   public arrayOfPlaces:any[] = [];
   // @ts-ignore
-  public places:String[] =
+  // @ts-ignore
+  // @ts-ignore
+  public places:any[] =
     [{city:'Amsterdam',place:["Leidsplein","Centraal","De Dam"],},
       {city:"Amstelveen",place:["Delf landlaan plein","Handbalstraat"]},
       {city:"Haarlem",place:["Jan straat", "Wester park"]}];
@@ -38,7 +40,6 @@ export class HomeComponent implements OnInit {
     this.places.forEach((value, x)=>{
       if (value.city === clickedCity){
         value.place.forEach((place, p)=>{
-          console.log(place);
           this.arrayOfPlaces.push(place);
         })
       }
