@@ -1,0 +1,26 @@
+nav{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+ul{
+  list-style-type: none;
+  padding: .5rem;
+  margin:0;
+}
+
+li{
+  display: inline-block;
+  padding: .5rem 1rem;
+  border-radius: 2px;
+  font-weight: bold;
+}
+
+li:hover{
+  transition: background-color .1s;
+  cursor: pointer;
+  background-color: var(--color-red);
+  color: var(--color-white);
+}

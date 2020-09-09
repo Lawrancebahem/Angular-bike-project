@@ -5,7 +5,6 @@ header{
   max-height: 100px;
   background-color: lightgray;
   padding: 1rem;
-  margin-bottom: 1rem;
 }
 
 img{
@@ -17,4 +16,8 @@ img{
 
 .title{
   text-align: center;
+}
+
+select{
+
 }

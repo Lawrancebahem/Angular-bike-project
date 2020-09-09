@@ -34,3 +34,11 @@
   background-position: center;
   background-size: cover;
 }
+
+select{
+  width: 100%;
+}
+
+.chosenCity{
+  display: contents;
+}

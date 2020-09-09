@@ -10,15 +10,15 @@ export class HomeComponent implements OnInit {
 
   // tslint:disable-next-line:ban-types
   public imagesArray: {image: String}[] = data;
-  public cities:String[];
+  public cities:String[] = ['Amsterdam','Amstelveen', 'Haarlem'];
   public chosenCity;
 
-  constructor() { }
+  constructor() {
+    this.chosenCity = this.cities[0];
+  }
 
   ngOnInit(): void {
     // @ts-ignore
     // @ts-ignore
-    this.cities = ['Amsterdam','Amstelveen', 'Haarlem'];
   }
-
 }
