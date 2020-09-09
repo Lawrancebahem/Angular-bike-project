@@ -2,18 +2,13 @@
 <div class="grid grid--scooter-overview">
 
   <div class="col">
-      <div id="custom-search-input">
-        <div class="input-group">
-          <input id="location" type="text" class="form-control input-lg" placeholder="Location" />
-        </div>
-        <ul class="list-group hover-items">
-          <li class="list-group-item">Amsterdam</li>
-          <li class="list-group-item">Amstelveen</li>
-          <li class="list-group-item">Haarlem</li>
-          <li class="list-group-item">Leidsplein</li>
-          <li class="list-group-item">Delflandlaan</li>
-        </ul>
-      </div>
+      <select style="width: 200px" [(ngModel)]="chosenCity">
+        <option *ngFor="let city of cities" [value]="city">
+          {{city}}
+        </option>
+      </select>
+    <div class="text-center"><strong>{{chosenCity}}</strong></div>
+
   </div>
 
   <div class="grid grid--half">

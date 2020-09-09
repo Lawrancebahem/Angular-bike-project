@@ -9,10 +9,16 @@ import data from '../../../../assets/data/data.json';
 export class HomeComponent implements OnInit {
 
   // tslint:disable-next-line:ban-types
-  imagesArray: {image: String}[] = data;
+  public imagesArray: {image: String}[] = data;
+  public cities:String[];
+  public chosenCity;
+
   constructor() { }
 
   ngOnInit(): void {
+    // @ts-ignore
+    // @ts-ignore
+    this.cities = ['Amsterdam','Amstelveen', 'Haarlem'];
   }
 
 }
