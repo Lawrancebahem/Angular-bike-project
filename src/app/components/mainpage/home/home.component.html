@@ -11,11 +11,24 @@
 
   </div>
 
-  <div class="grid grid--half">
+  <section class="grid grid--half">
 <!--    <img *ngFor="let data of imagesArray" class="img&#45;&#45;scooter" src="{{data.image}}" alt="Scooter image">-->
     <div *ngFor="let data of imagesArray" class="img--scooter" style="background-image: url({{data.image}})"></div>
-  </div>
+  </section>
 
 
-  <div class="col text-right">Info</div>
+  <section>
+    <p>
+      <strong>Battery percentage:</strong>
+      <br>
+      100%
+    </p>
+    <hr>
+    <p>
+      <strong>Location:</strong>
+      <br>
+      Leidseplein
+    </p>
+    <button type="button" class="btn btn-warning btn-lg btn-block">Subscribe</button>
+  </section>
 </div>
