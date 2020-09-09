@@ -1,12 +1,21 @@
 
 <div class="grid grid--scooter-overview">
 
-  <div>
-    <select [(ngModel)]="chosenCity">
-      <option *ngFor="let city of cities" [value]="city">
-        {{city}}
-      </option>
-    </select>
+  <div class="col">
+    <label>
+      <select style="width: 200px" [(ngModel)]="chosenCity">
+        <option *ngFor="let city of cities" [value]="city">
+          <div>
+            <span class="notification">
+            {{city}} <span class="badge">3</span>
+          </span>
+          </div>
+
+        </option>
+      </select>
+    </label>
+    <div class="text-center"><strong>{{chosenCity}}</strong></div>
+
   </div>
   <div>
     <h3>{{chosenCity}}</h3>
