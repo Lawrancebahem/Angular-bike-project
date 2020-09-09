@@ -1,5 +1,5 @@
 
-<div class="row m-auto">
+<div class="grid grid--scooter-overview">
 
   <div class="col">
       <div id="custom-search-input">
@@ -16,10 +16,11 @@
       </div>
   </div>
 
-  <div class="col-5 text-center">
-      <div class="row">
-        <div *ngFor="let data of imagesArray " class="image-size m-1" style="background-image: url({{data.image}})"></div>
-      </div>
+  <div class="grid grid--half">
+<!--    <img *ngFor="let data of imagesArray" class="img&#45;&#45;scooter" src="{{data.image}}" alt="Scooter image">-->
+    <div *ngFor="let data of imagesArray" class="img--scooter" style="background-image: url({{data.image}})"></div>
   </div>
+
+
   <div class="col text-right">Info</div>
 </div>
