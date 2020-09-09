@@ -13,9 +13,6 @@ export class HomeComponent implements OnInit {
   public imagesArray: {image: String}[] = data;
   public cities:String[] = ['Amsterdam','Amstelveen', 'Haarlem'];
   public arrayOfPlaces:any[] = [];
-  // @ts-ignore
-  // @ts-ignore
-  // @ts-ignore
   public places:any[] =
     [{city:'Amsterdam',place:["Leidsplein","Centraal","De Dam"],},
       {city:"Amstelveen",place:["Delf landlaan plein","Handbalstraat"]},
