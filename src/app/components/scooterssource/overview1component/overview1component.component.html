@@ -1,0 +1,30 @@
+
+<div class="border p-3">
+  <p>All list of scooters in your neighbourhood:</p>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Id</th>
+      <th>Tag</th>
+      <th>Status</th>
+      <th>Location</th>
+      <th>Mileage</th>
+      <th>Battery charge</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let scooter of scooters">
+      <td>{{scooter.id}}</td>
+      <td>{{scooter.tag}}</td>
+      <td>{{scooter.getScooterStatusEnum()[scooter.status]}}</td>
+      <td *ngIf="scooter.status !== scooter.getScooterStatusEnum().INUSE;else noLocation">{{scooter.gpsLocation}}</td>
+      <td>{{scooter.mileage}} KM</td>
+      <td>{{scooter.batteryCharge}} %</td>
+      <ng-template #noLocation><td></td></ng-template>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<button class="float-right btn-primary m-2" (click)="addRandomScooters()">Add Scooter</button>
+
+
