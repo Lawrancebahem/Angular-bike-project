@@ -10,6 +10,10 @@ ul{
   padding: .5rem;
   margin:0;
 }
+ul li.active{
+  background-color: var(--color-red);
+  color: var(--color-white);
+}
 
 li{
   display: inline-block;
