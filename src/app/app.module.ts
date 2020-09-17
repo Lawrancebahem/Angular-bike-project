@@ -3,11 +3,13 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/mainpage/header/header.component';
 import { NavBarComponent } from './components/mainpage/nav-bar/nav-bar.component';
-import {FormsModule} from '@angular/forms';
-import {CustomDatePipe} from './components/mainpage/header/custom.datepipe';
-import {AppRoutingModule,} from './app-routing-module';
-import {HomeComponent} from './components/mainpage/home/home.component';
-import {Overview1componentComponent} from './components/scooterssource/overview1component/overview1component.component';
+import { FormsModule } from '@angular/forms';
+import { CustomDatePipe } from './components/mainpage/header/custom.datepipe';
+import { AppRoutingModule ,} from './app-routing-module';
+import { HomeComponent } from './components/mainpage/home/home.component';
+import { Overview1componentComponent } from './components/scooterssource/overview1component/overview1component.component';
+import { Overview2componentComponent } from './components/scooterssource/overview2component/overview2component.component';
+import { Detail2Component } from './components/scooterssource/detail2/detail2.component';
 
 
 @NgModule({
@@ -18,6 +20,8 @@ import {Overview1componentComponent} from './components/scooterssource/overview1
     Overview1componentComponent,
     NavBarComponent,
     CustomDatePipe,
+    Overview2componentComponent,
+    Detail2Component,
   ],
   imports: [
     BrowserModule,

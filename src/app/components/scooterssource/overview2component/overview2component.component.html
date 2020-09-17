@@ -1,0 +1,21 @@
+<div class="row">
+  <div class="col-6 border p-3">
+    <p>All list of scooters in your neighbourhood:</p>
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Tag</th>
+        <th>Status</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr (click)="getScooterByTag(scooter);" *ngFor="let scooter of scooters">
+        <td>{{scooter.tag}}</td>
+        <td>{{scooter.getScooterStatusEnum()[scooter.status]}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <app-detail2 [scooter]="selectedScooter()"></app-detail2>
+</div>
+

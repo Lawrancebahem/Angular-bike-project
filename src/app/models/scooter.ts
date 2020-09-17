@@ -7,7 +7,7 @@
 //   MAINTENANCE = "Maintenance",
 // }
 
-enum ScooterStatus {
+export enum ScooterStatus {
   IDLE,
   IN_USE,
   MAINTENANCE

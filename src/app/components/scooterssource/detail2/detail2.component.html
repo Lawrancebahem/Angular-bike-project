@@ -1,0 +1,18 @@
+<div class="col">
+  <h3>Select a scooter</h3>
+  <div *ngFor="let scooter of getScooterData(_selectedScooter)">
+      <div class="form-group" *ngIf="scooter.name == 'Status' else input">
+        <label>{{scooter.name}}</label>
+        <select [value]="convertedStatus[scooter.value]" class="form-control" name="" id="">
+          <option [selected]="convertedStatus[scooter.value]" *ngFor="let i of _scooterStatus" [value]="convertedStatus[i]">{{convertedStatus[i]}}</option>
+        </select>
+      </div>
+      <ng-template #input>
+        <div class="form-group">
+          <label>{{scooter.name}}</label>
+          <input class="form-control" type="text" value="{{scooter.value}}">
+        </div>
+      </ng-template>
+  </div>
+</div>
+
