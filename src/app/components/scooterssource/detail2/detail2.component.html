@@ -1,18 +1,30 @@
-<div class="col">
-  <h3>Select a scooter</h3>
-  <div *ngFor="let scooter of getScooterData(_selectedScooter)">
-      <div class="form-group" *ngIf="scooter.name == 'Status' else input">
-        <label>{{scooter.name}}</label>
-        <select [value]="convertedStatus[scooter.value]" class="form-control" name="" id="">
-          <option [selected]="convertedStatus[scooter.value]" *ngFor="let i of _scooterStatus" [value]="convertedStatus[i]">{{convertedStatus[i]}}</option>
-        </select>
-      </div>
-      <ng-template #input>
-        <div class="form-group">
-          <label>{{scooter.name}}</label>
-          <input class="form-control" type="text" value="{{scooter.value}}">
-        </div>
-      </ng-template>
-  </div>
+<div *ngIf="selectedScooter != null && deletedScooter != selectedScooter;else noScooter" class="col" >
+  <h3>Update scooter {{selectedScooter.tag}} ({{-selectedScooter.id}})</h3>
+
+  <label>Tag</label>
+  <input [(ngModel)]="selectedScooter.tag" class="form-control" type="text" [value]="selectedScooter.tag">
+
+  <label>Status</label>
+          <select [(ngModel)]="selectedScooter.status" class="form-control" name="" id="">
+            <option *ngFor="let i of statusesArray"
+                    [attr.selected]="allStatuses[selectedScooter.status] == allStatuses[i] ? true : null"
+            value="{{i}}">
+               {{allStatuses[i]}}</option>
+          </select>
+
+  <label>Gps-Location</label>
+  <input [(ngModel)]="selectedScooter.gpsLocation" class="form-control" type="text" [value]="selectedScooter.gpsLocation">
+
+  <label>Mileage</label>
+  <input [(ngModel)]="selectedScooter.mileage" class="form-control" type="text" [value]="selectedScooter.mileage">
+
+  <label>Battery Charge</label>
+  <input [(ngModel)]="selectedScooter.batteryCharge" class="form-control" type="text" [value]="selectedScooter.batteryCharge">
+
+  <br>
+    <Button class="btn btn-danger float-right" (click)="emitScooter(selectedScooter)">Delete</Button>
+
 </div>
+
+  <ng-template #noScooter><p  class="col">There is no scooter selected yet.</p></ng-template>
 

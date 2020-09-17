@@ -16,7 +16,7 @@
     <tr *ngFor="let scooter of scooters">
       <td>{{scooter.id}}</td>
       <td>{{scooter.tag}}</td>
-      <td>{{scooter.getScooterStatusEnum()[scooter.status]}}</td>
+      <td>{{scooter.getStatusToString()}}</td>
       <td *ngIf="scooter.status !== scooter.getScooterStatusEnum().IN_USE;else noLocation">{{scooter.gpsLocation}}</td>
       <ng-template #noLocation><td></td></ng-template>
       <td>{{scooter.mileage}} M</td>

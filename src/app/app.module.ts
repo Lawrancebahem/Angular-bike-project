@@ -10,7 +10,7 @@ import { HomeComponent } from './components/mainpage/home/home.component';
 import { Overview1componentComponent } from './components/scooterssource/overview1component/overview1component.component';
 import { Overview2componentComponent } from './components/scooterssource/overview2component/overview2component.component';
 import { Detail2Component } from './components/scooterssource/detail2/detail2.component';
-
+// import { AutoFocusDirective } from './auto-focus.directive';
 
 @NgModule({
   declarations: [
@@ -22,6 +22,7 @@ import { Detail2Component } from './components/scooterssource/detail2/detail2.co
     CustomDatePipe,
     Overview2componentComponent,
     Detail2Component,
+    // AutoFocusDirective
   ],
   imports: [
     BrowserModule,

@@ -18,9 +18,9 @@ export enum ScooterStatus {
  * @author Lawrance Bahem
  */
 export class Scooter {
-  private static startingCode = 30001;
-  private static distanceLimit =  5000; // in meters
-  private static AmsterdamLocation = { latitude: 52.377956, longitude: 4.897070 };
+  private static _startingCode = 30001;
+  private static _distanceLimit =  5000; // in meters
+  private static _AmsterdamLocation = { latitude: 52.377956, longitude: 4.897070 };
 
   private _id: number;
   private _tag: String;
@@ -45,10 +45,10 @@ export class Scooter {
    */
   public static createRandomScooter(){
     const randomString = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
-    const randomId = this.startingCode++;
+    const randomId = this._startingCode++;
     const randomTag = this.generateRandomTag(8, randomString);
     const randomStatus = this.getRandomStatus(ScooterStatus);
-    const randomGPS = this.randomGeo(this.AmsterdamLocation.latitude,	this.AmsterdamLocation.longitude);
+    const randomGPS = this.randomGeo(this._AmsterdamLocation.latitude,	this._AmsterdamLocation.longitude);
     const randomLocation = randomGPS.latitude + ',' + randomGPS.longitude;
     const randomMileage = randomGPS.distance;
     const batteryCharge = this.generateRandomPercentage();
@@ -92,7 +92,7 @@ export class Scooter {
   public static randomGeo(latitude, longitude){
     const y0 = latitude;
     const x0 = longitude;
-    const rd = this.distanceLimit / 111300; // about 111300 meters in one degree
+    const rd = this._distanceLimit / 111300; // about 111300 meters in one degree
 
     const u = Math.random();
     const v = Math.random();
@@ -158,5 +158,46 @@ export class Scooter {
   }
   public getScooterStatusEnum(){
     return ScooterStatus;
+  }
+
+  static set startingCode(value: number) {
+    this._startingCode = value;
+  }
+
+  static set distanceLimit(value: number) {
+    this._distanceLimit = value;
+  }
+
+  static set AmsterdamLocation(value: { latitude: number; longitude: number }) {
+    this._AmsterdamLocation = value;
+  }
+
+  set id(value: number) {
+    this._id = value;
+  }
+
+  set tag(value: String) {
+    this._tag = value;
+  }
+
+  set status(value: ScooterStatus) {
+    console.log(" Called the value is " + value)
+    this._status = value;
+  }
+
+  set gpsLocation(value: String) {
+    this._gpsLocation = value;
+  }
+
+  set batteryCharge(value: number) {
+    this._batteryCharge = value;
+  }
+
+  set mileage(value: number) {
+    this._mileage = value;
+  }
+
+  getStatusToString(){
+    return ScooterStatus[this.status];
   }
 }
