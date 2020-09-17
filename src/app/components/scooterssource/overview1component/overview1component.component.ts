@@ -16,7 +16,6 @@ export class Overview1componentComponent implements OnInit {
     this.scooters = [];
     for (let i = 0;i<8; i++){
       this.addRandomScooters();
-      console.log(this.scooters[i]);
     }
   }
 

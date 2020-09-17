@@ -36,22 +36,13 @@ export class HomeComponent implements OnInit {
   // tslint:disable-next-line:ban-types typedef
   getPlace(clickedCity: String){
     this.arrayOfPlaces = [];
-    this.places.forEach((value, x) => {
+    this.places.forEach( value => {
       if (value.city === clickedCity){
-        value.place.forEach((place, p) => {
-          this.arrayOfPlaces.push(place);
-        });
+          value.place.forEach( place => {
+            this.arrayOfPlaces.push(place);
+          });
       }
     });
     return this.arrayOfPlaces;
   }
-}
-
-
-
-
-enum ScooterStatus {
-  IDLE,
-  INUSE,
-  MAINTENANCE,
 }

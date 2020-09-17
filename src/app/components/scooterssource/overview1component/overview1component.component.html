@@ -7,8 +7,8 @@
       <th>Id</th>
       <th>Tag</th>
       <th>Status</th>
-      <th>Location</th>
-      <th>Mileage</th>
+      <th>GPS Location</th>
+      <th>Distance</th>
       <th>Battery charge</th>
     </tr>
     </thead>
@@ -17,10 +17,10 @@
       <td>{{scooter.id}}</td>
       <td>{{scooter.tag}}</td>
       <td>{{scooter.getScooterStatusEnum()[scooter.status]}}</td>
-      <td *ngIf="scooter.status !== scooter.getScooterStatusEnum().INUSE;else noLocation">{{scooter.gpsLocation}}</td>
-      <td>{{scooter.mileage}} KM</td>
-      <td>{{scooter.batteryCharge}} %</td>
+      <td *ngIf="scooter.status !== scooter.getScooterStatusEnum().IN_USE;else noLocation">{{scooter.gpsLocation}}</td>
       <ng-template #noLocation><td></td></ng-template>
+      <td>{{scooter.mileage}} M</td>
+      <td>{{scooter.batteryCharge}} %</td>
     </tr>
     </tbody>
   </table>

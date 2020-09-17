@@ -1,16 +1,40 @@
 /**
+ * Enumeration for the scooter status
+ */
+// enum ScooterStatus {
+//   IDLE = "Idle",
+//   IN_USE = "In use",
+//   MAINTENANCE = "Maintenance",
+// }
+
+enum ScooterStatus {
+  IDLE,
+  IN_USE,
+  MAINTENANCE
+}
+
+/**
  * Scooter class
+ * @author Lawrance Bahem
  */
 export class Scooter {
-
-  private static randomString = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
   private static startingCode = 30001;
-  private static  distanceLimit =  5000; // in meters
-  private static AmsterdamLocation = {latitude: 52.377956, longitude: 4.897070};
+  private static distanceLimit =  5000; // in meters
+  private static AmsterdamLocation = { latitude: 52.377956, longitude: 4.897070 };
 
-  constructor(private _id: number, private _tag: String,
-              private _status: ScooterStatus, private _gpsLocation: String,
-              private _mileage: number, private _batteryCharge: number) {
+  private _id: number;
+  private _tag: String;
+  private _status: ScooterStatus;
+  private _gpsLocation: String;
+  private _batteryCharge: number;
+  private _mileage: number;
+
+  constructor(_id: number, _tag: String, _status: ScooterStatus, _gpsLocation: String, _mileage: number, _batteryCharge: number) {
+    this._mileage = _mileage;
+    this._batteryCharge = _batteryCharge;
+    this._gpsLocation = _gpsLocation;
+    this._status = _status;
+    this._tag = _tag;
     this._id = _id;
     this._tag = _tag;
     this._status = _status;
@@ -20,9 +44,9 @@ export class Scooter {
    * Create a random scooter with random information
    */
   public static createRandomScooter(){
-
+    const randomString = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
     const randomId = this.startingCode++;
-    const randomTag = this.generateRandomTag(8, this.randomString);
+    const randomTag = this.generateRandomTag(8, randomString);
     const randomStatus = this.getRandomStatus(ScooterStatus);
     const randomGPS = this.randomGeo(this.AmsterdamLocation.latitude,	this.AmsterdamLocation.longitude);
     const randomLocation = randomGPS.latitude + ',' + randomGPS.longitude;
@@ -30,7 +54,6 @@ export class Scooter {
     const batteryCharge = this.generateRandomPercentage();
 
     return new Scooter(randomId,randomTag, randomStatus, randomLocation, parseInt(randomMileage),batteryCharge);
-
   }
 
   /**
@@ -55,10 +78,9 @@ export class Scooter {
   private static getRandomStatus<T>(enumOb: T): T[keyof T] {
     const enumValues = Object.keys(enumOb)
       .map(n => Number.parseInt(n))
-      .filter(n => !Number.isNaN(n)) as unknown as T[keyof T][]
-    const randomIndex = Math.floor(Math.random() * enumValues.length)
-    const randomEnumValue = enumValues[randomIndex]
-    return randomEnumValue;
+      .filter(n => !Number.isNaN(n)) as unknown as T[keyof T][];
+    const randomIndex = Math.floor(Math.random() * enumValues.length);
+    return enumValues[randomIndex];
   }
 
   /**
@@ -137,9 +159,4 @@ export class Scooter {
   public getScooterStatusEnum(){
     return ScooterStatus;
   }
-}
-enum ScooterStatus {
-  IDLE,
-  INUSE,
-  MAINTENANCE,
 }
