@@ -50,13 +50,8 @@ export class Overview2componentComponent implements OnInit {
     this.scooters.push(Scooter.createRandomScooter());
   }
 
-  public deleteScooter(value){
-    for (let i = 0;i<this.scooters.length;i++){
-      if (this.scooters[i].id == value.id){
-        this.scooters.splice(i, 1);
-      }
-    }
-
+  public deleteScooter(scooter){
+    this.scooters.splice(this.scooters.indexOf(scooter), 1);
   }
   /**
    * Set the focus on the last added scooter
