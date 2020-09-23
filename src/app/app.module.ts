@@ -7,11 +7,16 @@ import { FormsModule } from '@angular/forms';
 import { CustomDatePipe } from './components/mainpage/header/custom.datepipe';
 import { AppRoutingModule ,} from './app-routing-module';
 import { HomeComponent } from './components/mainpage/home/home.component';
-import { Overview1componentComponent } from './components/scooterssource/overview1component/overview1component.component';
-import { Overview2componentComponent } from './components/scooterssource/overview2component/overview2component.component';
-import { Detail2Component } from './components/scooterssource/detail2/detail2.component';
-// import { AutoFocusDirective } from './auto-focus.directive';
+import { Overview1componentComponent } from './components/scooters/overview1component/overview1component.component';
+import { Overview2componentComponent } from './components/scooters/overview2component/overview2component.component';
+import { Detail2Component } from './components/scooters/detail2/detail2.component';
+import { Overview3Component } from './components/scooters/overview3component/overview3.component';
+import { Detail3Component } from './components/scooters/detail3/detail3.component';
+import {ScootersService} from './services/scooters.service';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
+
+// @ts-ignore
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,14 +27,18 @@ import { Detail2Component } from './components/scooterssource/detail2/detail2.co
     CustomDatePipe,
     Overview2componentComponent,
     Detail2Component,
+    Overview3Component,
+    Detail3Component,
     // AutoFocusDirective
+
   ],
   imports: [
     BrowserModule,
     FormsModule,
     AppRoutingModule,
+    NoopAnimationsModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [ScootersService],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

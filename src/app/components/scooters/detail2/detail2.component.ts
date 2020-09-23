@@ -15,6 +15,7 @@ export class Detail2Component implements OnInit {
   public statusesArray = this.statusScooter(ScooterStatus);
   public allStatuses = ScooterStatus;
   public deletedScooter;
+
   @Output()outputEvent :EventEmitter<Scooter> = new EventEmitter<Scooter>();
 
   constructor() {
