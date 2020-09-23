@@ -5,7 +5,7 @@
   <input #tagInput (keyup)="checkValues()" class="form-control" type="text" [value]="editedScooter.tag">
 
   <label>Status</label>
-  <select  #statusInput class="form-control" name="" id="">
+  <select #statusInput (change)="checkValues()" class="form-control" name="" id="">
     <option *ngFor="let i of statusesArray"
             [attr.selected]="allStatuses[editedScooter.status] == allStatuses[i] ? true : null"
             value="{{i}}">
@@ -14,13 +14,13 @@
 
   <label>Gps-Location</label>
 
-  <input #gpsLocationInput class="form-control" type="text" [value]="editedScooter.gpsLocation">
+  <input #gpsLocationInput (keyup)="checkValues()" class="form-control" type="text" [value]="editedScooter.gpsLocation">
 
   <label>Mileage</label>
-  <input  #mileageInput class="form-control" type="text" [value]="editedScooter.setMileage">
+  <input  #mileageInput (keyup)="checkValues()" class="form-control" type="text" [value]="editedScooter.setMileage">
 
   <label>Battery Charge</label>
-  <input  #batteryChargeInput class="form-control" type="text" [value]="editedScooter.batteryCharge">
+  <input  #batteryChargeInput (keyup)="checkValues()" class="form-control" type="text" [value]="editedScooter.batteryCharge">
   <br>
   <div class="btn-group float-right" role="group" aria-label="Basic example">
     <Button class="btn btn-primary float-right m-1" (click)="cancel()">Cancel</Button>
