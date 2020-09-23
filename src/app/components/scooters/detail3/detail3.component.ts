@@ -18,11 +18,13 @@ import has = Reflect.has;
   styleUrls: ['./detail3.component.css'],
 })
 
-
-export class Detail3Component implements OnInit, OnChanges {
+export class Detail3Component implements OnInit {
 
   //by emitting true for overview3 component
   // which takes care of removing the selection focus from the selected scooter
+
+  @Output('removeSelectedScooter')
+  public removeSelectedScooter:EventEmitter<null> = new EventEmitter<null>();
 
   // ngOnChanges(changes: SimpleChanges): void {
     //   if (this.newClickedScooter){
@@ -32,18 +34,17 @@ export class Detail3Component implements OnInit, OnChanges {
     //   }
     // }
 
-  @Input('editedScooterId')
-  public editedScooterId: number;
+  // Selected scooter id from parent component
+  @Input('selectedScooterId')
+  public selectedScooterId: number;
+
   public hasChanged:boolean;
-  @Input('showPanel')
-  public showPanel:boolean;
-  public showPanel2:boolean;
-  public cancelledDialog = false;
   public showDialog = false;
   public statusesArray = this.statusScooter(ScooterStatus);
   public allStatuses = ScooterStatus;
   public deletedScooter;
   public editedScooter: Scooter;
+  private CONFIRM_MESSAGE = "You have unsaved changes. Do you want to proceed?";
 
   @Input('newClickedScooterId')
   public newClickedScooter:Scooter;
@@ -54,15 +55,11 @@ export class Detail3Component implements OnInit, OnChanges {
   @ViewChild('mileageInput') mileageInput: ElementRef;
   @ViewChild('batteryChargeInput') batteryChargeInput: ElementRef;
 
-  constructor(private scooterService: ScootersService) {}
+  constructor(private scooterService: ScootersService) {
+  }
 
 
   ngOnInit(): void {
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    this.showPanel2 = this.showPanel;
-    console.log(this.showPanel2);
   }
 
   /**
@@ -70,17 +67,19 @@ export class Detail3Component implements OnInit, OnChanges {
    * @param id
    */
   public deleteScooter(id: number) {
-    this.deletedScooter = this.scooterService.deleteById(id);
-    this.editedScooterId = -1;
-    return this.deletedScooter;
+    const confirmChanges = confirm(this.CONFIRM_MESSAGE);
+    if(confirmChanges){
+      this.deletedScooter = this.scooterService.deleteById(id);
+      this.selectedScooterId = -1;
+      return this.deletedScooter;
+    }
   }
 
   /**
    * Get a scooter by its id
    */
   public getScooterById(): Scooter {
-    return this.editedScooter = this.scooterService.findById(this.editedScooterId);
-
+    return this.editedScooter = this.scooterService.findById(this.selectedScooterId);
   }
 
   /**
@@ -89,43 +88,37 @@ export class Detail3Component implements OnInit, OnChanges {
   public saveOrUpdate(): void {
     //Return new scooter with the new input values
     let newEditedScooter = this.getInputFieldsValues();
-    this.editedScooter = this.getInputFieldsValues();
     //Add or update
     this.scooterService.save(newEditedScooter);
-    this.cancelledDialog = true;
     this.hasChanged = false;
   }
 
   /**
    * To reset all input fields to the origin values of the scooter
    */
-  public reset(isOpen?:boolean): void {
-    if(this.hasChanged){
-      this.showDialog = true;
-      if(isOpen){
-        this.showDialog = false;
-        this.tagInput.nativeElement.value = this.editedScooter.tag;
-        this.gpsLocationInput.nativeElement.value = this.editedScooter.gpsLocation;
-        this.mileageInput.nativeElement.value = this.editedScooter.setMileage;
-        this.batteryChargeInput.nativeElement.value = this.editedScooter.batteryCharge;
-        this.statusInput.nativeElement.value = this.editedScooter.status;
-      }
+  public reset(): void {
+    const confirmChanges = confirm(this.CONFIRM_MESSAGE);
+    if(this.hasChanged && confirmChanges){
+      this.tagInput.nativeElement.value = this.editedScooter.tag;
+      this.gpsLocationInput.nativeElement.value = this.editedScooter.gpsLocation;
+      this.mileageInput.nativeElement.value = this.editedScooter.setMileage;
+      this.batteryChargeInput.nativeElement.value = this.editedScooter.batteryCharge;
+      this.statusInput.nativeElement.value = this.editedScooter.status;
+      this.hasChanged = false;
     }
   }
 
   /**
-   * To clear the fields
+   * To clear all fields
    */
   clear(): void {
-    if (!this.compareScooter(this.getInputFieldsValues(), this.editedScooter)) {
-      this.showDialog = true;
-    }else {
+    const confirmChanges = this.hasChanged ? confirm(this.CONFIRM_MESSAGE) : confirm("Are you sure you want to clear all fields?");
+    if(confirmChanges){
       this.tagInput.nativeElement.value = '';
       this.gpsLocationInput.nativeElement.value = '';
       this.mileageInput.nativeElement.value = '';
       this.batteryChargeInput.nativeElement.value = '';
       this.statusInput.nativeElement.value = '';
-      this.showDialog = false;
     }
   }
 
@@ -134,10 +127,14 @@ export class Detail3Component implements OnInit, OnChanges {
    */
   cancel(): void {
     if (this.hasChanged) {
-      this.showDialog = true;
+      let confirmChanges = confirm(this.CONFIRM_MESSAGE);
+      if(confirmChanges){
+        this.selectedScooterId = null;
+        this.removeSelectedScooter.emit();
+      }
     } else {
-      this.showDialog = false;
-      this.showPanel2 = false;
+      this.selectedScooterId = null;
+      this.removeSelectedScooter.emit();
     }
   }
 
@@ -149,13 +146,13 @@ export class Detail3Component implements OnInit, OnChanges {
    * @private
    */
   private getInputFieldsValues(): Scooter {
-    if (this.editedScooterId != -1) {
+    if (this.selectedScooterId != -1) {
       let tag = this.tagInput.nativeElement.value;
       let gpsLocation = this.gpsLocationInput.nativeElement.value;
       let mileage = this.mileageInput.nativeElement.value;
       let batteryCharge = this.batteryChargeInput.nativeElement.value;
       let status = this.statusInput.nativeElement.value;
-      return new Scooter(this.editedScooterId, tag, status, gpsLocation, mileage, batteryCharge);
+      return new Scooter(this.selectedScooterId, tag, status, gpsLocation, mileage, batteryCharge);
     }
   }
 

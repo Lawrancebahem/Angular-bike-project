@@ -11,7 +11,7 @@ export class Overview3Component implements OnInit {
   public selectedScooter: Scooter;
   public newClickedScooterId;
   public selectedScooterId;
-  public showPanel:boolean;
+  public cancelButtonIsClicked:boolean;
 
   constructor(public scooterService:ScootersService) {
   }
@@ -24,11 +24,8 @@ export class Overview3Component implements OnInit {
    * Get the the click scooter, and set teh this.clicked to true (for styling the last added element)
    * @param value
    */
-  public getClickedScooter(value: Scooter):Scooter {
-    this.showPanel = true;
-    this.newClickedScooterId = value.id;
-    this.selectedScooterId = value.id;
-    return this.selectedScooter = value;
+  public getClickedScooter(value: Scooter) {
+    return this.selectedScooterId = value.id;
   }
 
   /**
