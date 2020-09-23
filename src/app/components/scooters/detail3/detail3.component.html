@@ -1,8 +1,8 @@
-<div *ngIf="getScooterById() != null && deletedScooter != editedScooter else noScooter" class="col">
+<div *ngIf="getScooterById() != null && deletedScooter != editedScooter && showPanel2 else noScooter" class="col">
   <h3>Update scooter {{editedScooter.tag}} ({{-editedScooter.id}} | )</h3>
 
   <label>Tag</label>
-  <input #tagInput class="form-control" type="text" [value]="editedScooter.tag">
+  <input #tagInput (keyup)="checkValues()" class="form-control" type="text" [value]="editedScooter.tag">
 
   <label>Status</label>
   <select  #statusInput class="form-control" name="" id="">
@@ -14,7 +14,7 @@
 
   <label>Gps-Location</label>
 
-  <input  #gpsLocationInput class="form-control" type="text" [value]="editedScooter.gpsLocation">
+  <input #gpsLocationInput class="form-control" type="text" [value]="editedScooter.gpsLocation">
 
   <label>Mileage</label>
   <input  #mileageInput class="form-control" type="text" [value]="editedScooter.setMileage">
@@ -25,25 +25,25 @@
   <div class="btn-group float-right" role="group" aria-label="Basic example">
     <Button class="btn btn-primary float-right m-1" (click)="cancel()">Cancel</Button>
     <Button class="btn btn-primary float-right m-1" (click)="clear()">Clear</Button>
-    <Button [disabled]="!noChange" class="btn btn-primary float-right m-1" (click)="reset(false)">Reset</Button>
-    <Button [disabled]="!noChange" class="btn btn-primary float-right m-1" (click)="saveOrUpdate()">Save</Button>
-    <Button [disabled]="!cancelledDialog" class="btn btn-danger float-right m-1" (click)="deleteScooter(editedScooterId)">Delete</Button>
+    <Button [disabled]="!hasChanged" class="btn btn-primary float-right m-1" (click)="reset(false)">Reset</Button>
+    <Button [disabled]="!hasChanged" class="btn btn-primary float-right m-1" (click)="saveOrUpdate()">Save</Button>
+    <Button [disabled]="hasChanged" class="btn btn-danger float-right m-1" (click)="deleteScooter(editedScooterId)">Delete</Button>
   </div>
 </div>
 <ng-template #noScooter><p class="col">There is no scooter selected yet.</p></ng-template>
 
 <!--dialog confirmation-->
-<div *ngIf="showDialog && !cancelledDialog">
+<div *ngIf="showDialog">
   <div id="id01" class="modal" style="display: block">
     <form class="modal-content w-50 text-center float-right bg-light centeredDialog">
-      <span class="close text-lg-right" title="Close Modal" (click)="cancelledDialog = true;">×</span>
+      <span class="close text-lg-right" title="Close Modal" (click)="showDialog = false;">×</span>
       <div class="container w-50">
         <h1>Discard changes</h1>
         <hr>
         <p>Are you sure you want to discard unsaved changes</p>
         <div class="clearfix">
-          <button (click)="cancelledDialog = true;" type="button" class="cancelbtn m-1 btn btn-dangern">Cancel</button>
-          <button (click)="reset(true); " type="button" class="deletebtn m-1 btn btn-primary">Ok</button>
+          <button (click)="showDialog = false;" type="button" class="cancelbtn m-1 btn btn-dangern">Cancel</button>
+          <button (click)="reset(true); showDialog = false " type="button" class="deletebtn m-1 btn btn-primary">Ok</button>
         </div>
       </div>
     </form>

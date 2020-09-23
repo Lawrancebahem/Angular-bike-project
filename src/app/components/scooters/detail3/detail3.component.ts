@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import {Scooter, ScooterStatus} from '../../../models/scooter';
 import {ScootersService} from '../../../services/scooters.service';
+import has = Reflect.has;
 
 
 @Component({
@@ -22,11 +23,21 @@ export class Detail3Component implements OnInit, OnChanges {
 
   //by emitting true for overview3 component
   // which takes care of removing the selection focus from the selected scooter
-  @Output() cancelledEditing: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+  // ngOnChanges(changes: SimpleChanges): void {
+    //   if (this.newClickedScooter){
+    //     setInterval(()=>{
+    //       this.checkValues()
+    //     },1000)
+    //   }
+    // }
 
   @Input('editedScooterId')
   public editedScooterId: number;
-  public noChange:boolean;
+  public hasChanged:boolean;
+  @Input('showPanel')
+  public showPanel:boolean;
+  public showPanel2:boolean;
   public cancelledDialog = false;
   public showDialog = false;
   public statusesArray = this.statusScooter(ScooterStatus);
@@ -34,8 +45,8 @@ export class Detail3Component implements OnInit, OnChanges {
   public deletedScooter;
   public editedScooter: Scooter;
 
-  @Input("newClickedScooter")
-  public newClickedScooter:boolean;
+  @Input('newClickedScooterId')
+  public newClickedScooter:Scooter;
   //Input elements
   @ViewChild('gpsLocationInput') gpsLocationInput: ElementRef;
   @ViewChild('statusInput') statusInput: ElementRef;
@@ -43,13 +54,15 @@ export class Detail3Component implements OnInit, OnChanges {
   @ViewChild('mileageInput') mileageInput: ElementRef;
   @ViewChild('batteryChargeInput') batteryChargeInput: ElementRef;
 
-  constructor(private scooterService: ScootersService) {
-  }
-
+  constructor(private scooterService: ScootersService) {}
 
 
   ngOnInit(): void {
+  }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    this.showPanel2 = this.showPanel;
+    console.log(this.showPanel2);
   }
 
   /**
@@ -76,24 +89,27 @@ export class Detail3Component implements OnInit, OnChanges {
   public saveOrUpdate(): void {
     //Return new scooter with the new input values
     let newEditedScooter = this.getInputFieldsValues();
+    this.editedScooter = this.getInputFieldsValues();
     //Add or update
     this.scooterService.save(newEditedScooter);
     this.cancelledDialog = true;
+    this.hasChanged = false;
   }
 
   /**
    * To reset all input fields to the origin values of the scooter
    */
-  public reset(resetDirectly:boolean): void {
-    if (resetDirectly){
-      this.tagInput.nativeElement.value = this.editedScooter.tag;
-      this.gpsLocationInput.nativeElement.value = this.editedScooter.gpsLocation;
-      this.mileageInput.nativeElement.value = this.editedScooter.setMileage;
-      this.batteryChargeInput.nativeElement.value = this.editedScooter.batteryCharge;
-      this.statusInput.nativeElement.value = this.editedScooter.status;
-      this.cancelledDialog = true;
-    }else if(!this.checkChanges()) {
-      this.cancelledDialog = false;
+  public reset(isOpen?:boolean): void {
+    if(this.hasChanged){
+      this.showDialog = true;
+      if(isOpen){
+        this.showDialog = false;
+        this.tagInput.nativeElement.value = this.editedScooter.tag;
+        this.gpsLocationInput.nativeElement.value = this.editedScooter.gpsLocation;
+        this.mileageInput.nativeElement.value = this.editedScooter.setMileage;
+        this.batteryChargeInput.nativeElement.value = this.editedScooter.batteryCharge;
+        this.statusInput.nativeElement.value = this.editedScooter.status;
+      }
     }
   }
 
@@ -101,15 +117,15 @@ export class Detail3Component implements OnInit, OnChanges {
    * To clear the fields
    */
   clear(): void {
-    if (!this.checkChanges()) {
-      this.cancelledDialog = false;
+    if (!this.compareScooter(this.getInputFieldsValues(), this.editedScooter)) {
+      this.showDialog = true;
     }else {
       this.tagInput.nativeElement.value = '';
       this.gpsLocationInput.nativeElement.value = '';
       this.mileageInput.nativeElement.value = '';
       this.batteryChargeInput.nativeElement.value = '';
       this.statusInput.nativeElement.value = '';
-      this.cancelledDialog = true;
+      this.showDialog = false;
     }
   }
 
@@ -117,36 +133,16 @@ export class Detail3Component implements OnInit, OnChanges {
    * Cancel changes, but before canceling it check if the user wants to save the changes
    */
   cancel(): void {
-    if (!this.checkChanges()) {
-      this.cancelledDialog = false;
+    if (this.hasChanged) {
+      this.showDialog = true;
     } else {
-      this.editedScooterId = -1;
-      //Emit true, the editing has been cancelled
-      this.cancelledEditing.emit(true);
-      this.cancelledDialog = true;
-    }
-  }
-
-  /**
-   * Check if the scooter the ones being edited equal to the one in the server
-   */
-  public checkChanges(): boolean {
-    if (this.editedScooterId > -1) {
-      let newEditedScooter = this.getInputFieldsValues();
-      this.showDialog = !this.compare(newEditedScooter, this.editedScooter);
-      this.cancelledDialog = false;
-      return !this.showDialog;
-    } else {
-      this.cancelledDialog = true;
-      return false;
+      this.showDialog = false;
+      this.showPanel2 = false;
     }
   }
 
   public checkValues():boolean{
-    let newScooter  = this.getInputFieldsValues();
-    return this.noChange = !this.compare(this.editedScooter, newScooter);
-
-
+    return this.hasChanged = !this.compareScooter(this.editedScooter, this.getInputFieldsValues());
   }
   /**
    * Return a new edited scooter based on the new values
@@ -174,25 +170,42 @@ export class Detail3Component implements OnInit, OnChanges {
       .filter(n => !Number.isNaN(n)) as unknown as T[keyof T][];
   }
 
+  // /**
+  //  * To compare the values of the scooter
+  //  * @param scooter1
+  //  * @param scooter2
+  //  * @private
+  //  */
+  // public compare(scooter1: Scooter, scooter2: Scooter): boolean {
+  //   if(scooter1 != null && scooter2 != null){
+  //     return scooter1 == scooter2;
+  //   }
+  //   return false;
+  // }
+
   /**
-   * To compare the values of the scooter
+   * To compare with values of the scooter
    * @param scooter1
    * @param scooter2
-   * @private
    */
-  public compare(scooter1: Scooter, scooter2: Scooter): boolean {
-    return scooter1.tag == scooter2.tag &&
-      scooter1.status == scooter2.status &&
-      scooter1.gpsLocation == scooter2.gpsLocation &&
-      scooter1.setMileage == scooter2.setMileage &&
-      scooter1.batteryCharge == scooter2.batteryCharge;
-  }
+  public compareScooter(scooter1: Scooter, scooter2: Scooter): boolean{
+    if(scooter1 != null && scooter2 != null){
+      // Create arrays of property names
+      const props = Object.getOwnPropertyNames(scooter1);
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (this.newClickedScooter){
-      setInterval(()=>{
-        this.checkValues()
-      },1000)
+      for (let i = 0; i < props.length; i++) {
+        let propName = props[i];
+
+        // If values of same property are not equal,
+        // objects are not equivalent
+        if (scooter1[propName] !== scooter2[propName]) {
+          return false;
+        }
+      }
+
+      // If we made it this far, objects
+      // are considered equivalent
+      return true;
     }
   }
 }

@@ -9,10 +9,11 @@ import {ScootersService} from '../../../services/scooters.service';
 export class Overview3Component implements OnInit {
 
   public selectedScooter: Scooter;
+  public newClickedScooterId;
   public selectedScooterId;
-  public cancelledEditing:boolean = false;
-  public newClickedScooter = false;
-  constructor(private scooterService:ScootersService) {
+  public showPanel:boolean;
+
+  constructor(public scooterService:ScootersService) {
   }
 
   ngOnInit(): void {
@@ -20,14 +21,14 @@ export class Overview3Component implements OnInit {
   }
 
   /**
-   * Get the the click scooter, and set teh this.clicked to ture (for styling the last added element)
+   * Get the the click scooter, and set teh this.clicked to true (for styling the last added element)
    * @param value
    */
   public getClickedScooter(value: Scooter):Scooter {
-    this.newClickedScooter = true;
+    this.showPanel = true;
+    this.newClickedScooterId = value.id;
     this.selectedScooterId = value.id;
     return this.selectedScooter = value;
-
   }
 
   /**
@@ -44,15 +45,10 @@ export class Overview3Component implements OnInit {
   public addRandomWithFocusSelection() {
     this.selectedScooter = Scooter.createRandomScooter();
     this.selectedScooterId = this.selectedScooter.id;
-    this.cancelledEditing = false;
     this.scooterService.save(this.selectedScooter);
   }
 
   public getScooters():Scooter[]{
     return this.scooterService.findAll();
-  }
-
-  public getCancelled(event:boolean){
-    this.cancelledEditing = event;
   }
 }
