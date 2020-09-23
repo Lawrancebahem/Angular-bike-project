@@ -1,5 +1,6 @@
-<div class="row">
-  <div class="col-6 border p-3">
+
+<div class="row p-3">
+  <div class="col-6 border">
     <p>All list of scooters in your neighbourhood:</p>
     <table ng class="table table-striped">
       <thead>
@@ -18,5 +19,5 @@
     </table>
     <button  (click)="addRandomWithFocusSelection();" class="btn btn-primary">Add Scooter</button>
   </div>
-  <app-detail2 (outputEvent)="deleteScooter($event)" [scooter]="getSelectedScooter()"></app-detail2>
+  <app-detail2 class="col-6" (outputEvent)="deleteScooter($event)" [scooter]="getSelectedScooter()"></app-detail2>
 </div>

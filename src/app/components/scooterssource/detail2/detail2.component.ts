@@ -32,21 +32,6 @@ export class Detail2Component implements OnInit {
   ngOnInit(): void {
   }
 
-  public getScooterData(value: Scooter){
-
-    let array = [];
-    for (const property in value) {
-      let label = property.replace('_', '').charAt(0).toUpperCase() + property.slice(2);
-      array.push(
-        {
-          name: label,
-          value: value[property]
-        }
-      );
-    }
-    return array;
-  }
-
   private statusScooter<T>(enumOb: T): T[keyof T][] {
     const enumValues = Object.keys(enumOb)
       .map(n => Number.parseInt(n))
