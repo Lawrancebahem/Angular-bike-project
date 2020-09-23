@@ -38,7 +38,9 @@ export class Detail3Component implements OnInit {
   @Input('selectedScooterId')
   public selectedScooterId: number;
 
+  @Input('hasChanged')
   public hasChanged:boolean;
+  
   public showDialog = false;
   public statusesArray = this.statusScooter(ScooterStatus);
   public allStatuses = ScooterStatus;

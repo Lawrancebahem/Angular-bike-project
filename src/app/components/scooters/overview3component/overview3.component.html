@@ -18,6 +18,6 @@
     </table>
     <button (click)="addRandomWithFocusSelection();" class="btn btn-primary">Add Scooter</button>
   </div>
-  <app-detail3 [selectedScooterId]="selectedScooterId" (removeSelectedScooter)="selectedScooterId = $event"></app-detail3>
+  <app-detail3 [selectedScooterId]="selectedScooterId" [hasChanged]="newClickedScooterId != null" (removeSelectedScooter)="selectedScooterId = $event"></app-detail3>
 </div>
 

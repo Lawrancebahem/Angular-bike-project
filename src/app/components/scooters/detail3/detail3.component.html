@@ -30,22 +30,4 @@
     <Button [disabled]="hasChanged" class="btn btn-danger float-right m-1" (click)="deleteScooter(selectedScooterId)">Delete</Button>
   </div>
 </div>
-<ng-template #noScooter><p class="col">There is no scooter selected yet.</p></ng-template>
-
-<!--dialog confirmation-->
-<div *ngIf="showDialog">
-  <div id="id01" class="modal" style="display: block">
-    <form class="modal-content w-50 text-center float-right bg-light centeredDialog">
-      <span class="close text-lg-right" title="Close Modal" (click)="showDialog = false;">×</span>
-      <div class="container w-50">
-        <h1>Discard changes</h1>
-        <hr>
-        <p>Are you sure you want to discard unsaved changes</p>
-        <div class="clearfix">
-          <button (click)="showDialog = false;" type="button" class="cancelbtn m-1 btn btn-dangern">Cancel</button>
-          <button (click)="reset(); showDialog = false " type="button" class="deletebtn m-1 btn btn-primary">Ok</button>
-        </div>
-      </div>
-    </form>
-  </div>
-</div>
+<ng-template #noScooter><p class="col">Please select a scooter</p></ng-template>
