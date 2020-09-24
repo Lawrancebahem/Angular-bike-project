@@ -18,7 +18,7 @@ import has = Reflect.has;
   styleUrls: ['./detail3.component.css'],
 })
 
-export class Detail3Component implements OnInit {
+export class Detail3Component implements OnInit, OnChanges {
 
   //by emitting true for overview3 component
   // which takes care of removing the selection focus from the selected scooter
@@ -40,7 +40,7 @@ export class Detail3Component implements OnInit {
 
   @Input('hasChanged')
   public hasChanged:boolean;
-  
+
   public showDialog = false;
   public statusesArray = this.statusScooter(ScooterStatus);
   public allStatuses = ScooterStatus;
@@ -60,6 +60,11 @@ export class Detail3Component implements OnInit {
   constructor(private scooterService: ScootersService) {
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if(this.selectedScooterId){
+      this.hasChanged = false;
+    }
+  }
 
   ngOnInit(): void {
   }
