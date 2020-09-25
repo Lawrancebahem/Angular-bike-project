@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {Scooter} from '../../../models/scooter';
 import {ScootersService} from '../../../services/scooters.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, Params, Router} from '@angular/router';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-overview4component',
@@ -13,7 +14,7 @@ export class Overview4Component implements OnInit {
   public newClickedScooterId;
   public cancelButtonIsClicked: boolean;
   public defaultScooter: Scooter = Scooter.createRandomScooter();
-
+  public selectedScooterId;
   constructor(public scooterService: ScootersService,
               private route:Router,
               private activeRoute:ActivatedRoute) {
@@ -28,6 +29,7 @@ export class Overview4Component implements OnInit {
    * @param scooter
    */
   public getClickedScooter(scooter: Scooter) {
+    this.selectedScooterId = scooter.id;
     this.route.navigate([scooter.id], {relativeTo:this.activeRoute})
   }
 

@@ -37,7 +37,7 @@ export class Detail3Component implements OnInit, OnChanges {
   @ViewChild('mileageInput') mileageInput: ElementRef;
   @ViewChild('batteryChargeInput') batteryChargeInput: ElementRef;
 
-  constructor(private scooterService: ScootersService,private cdRef:ChangeDetectorRef) {
+  constructor(public scooterService: ScootersService,private cdRef:ChangeDetectorRef) {
   }
 
 

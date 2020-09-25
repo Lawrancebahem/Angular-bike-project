@@ -5,7 +5,6 @@ import {Overview1componentComponent} from './components/scooters/overview1compon
 import {Overview2componentComponent} from './components/scooters/overview2component/overview2component.component';
 import {Overview3Component} from './components/scooters/overview3component/overview3.component';
 import {ErrorComponent} from './components/mainpage/error-component/error-component.component';
-import {url} from 'inspector';
 import {Overview4Component} from './components/scooters/overview4component/overview4component.component';
 import {Detail4Component} from './components/scooters/detail4/detail4.component';
 
@@ -18,6 +17,7 @@ const routes: Routes = [
   {path: 'overview4', component: Overview4Component,
     children: [
       {path: ':id', component: Detail4Component},
+      {path: '',redirectTo: '-1', pathMatch: 'full'},
     ]
   },
   {path: '**', component: ErrorComponent}

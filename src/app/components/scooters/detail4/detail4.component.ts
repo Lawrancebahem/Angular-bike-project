@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 import {Scooter, ScooterStatus} from '../../../models/scooter';
 import {ScootersService} from '../../../services/scooters.service';
 import {ActivatedRoute, Params, Router} from '@angular/router';
@@ -9,17 +9,16 @@ import {Subscription} from 'rxjs';
   templateUrl: './detail4.component.html',
   styleUrls: ['./detail4.component.css']
 })
-export class Detail4Component implements OnInit {
-  @Input('hasChanged')
-  public hasChanged: boolean;
+export class Detail4Component implements OnInit, OnDestroy {
 
-  @Input('newSelectedScooter')
-  public newSelectedScooter;
+  public hasChanged: boolean;
+  public selectedScooterId;
   public statusesArray = this.statusScooter(ScooterStatus);
   public allStatuses = ScooterStatus;
   public deletedScooter;
   public editedScooter: Scooter;
   private CONFIRM_MESSAGE = 'You have unsaved changes. Do you want to proceed?';
+  private paramsSubscription: Subscription;
 
   //Input elements
   @ViewChild('gpsLocationInput') gpsLocationInput: ElementRef;
@@ -28,20 +27,22 @@ export class Detail4Component implements OnInit {
   @ViewChild('mileageInput') mileageInput: ElementRef;
   @ViewChild('batteryChargeInput') batteryChargeInput: ElementRef;
 
-  private paramsSubscription: Subscription;
-
-  private selectedScooterId;
 
   constructor(private scooterService: ScootersService,
-              private route:Router,
+              private route: Router,
               private activeRouter: ActivatedRoute) {
   }
 
+
   ngOnInit(): void {
-    this.paramsSubscription = this.activeRouter.params.subscribe((params:Params)=>{
-      this.selectedScooterId = Number(params["id"]);
-      console.log(this.selectedScooterId)
-    })
+    this.paramsSubscription = this.activeRouter.params.subscribe((params: Params) => {
+      this.hasChanged = false;
+      this.selectedScooterId = Number(params['id']);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.paramsSubscription && this.paramsSubscription.unsubscribe();
   }
 
 
@@ -110,8 +111,10 @@ export class Detail4Component implements OnInit {
     if (this.hasChanged) {
       let confirmChanges = confirm(this.CONFIRM_MESSAGE);
       if (confirmChanges) {
+        this.selectedScooterId = -1;
       }
     } else {
+      this.selectedScooterId = -1;
     }
   }
 
@@ -164,7 +167,6 @@ export class Detail4Component implements OnInit {
           return false;
         }
       }
-
       // If we made it this far, objects
       // are considered equivalent
       return true;
