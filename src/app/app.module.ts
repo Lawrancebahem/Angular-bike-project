@@ -14,7 +14,9 @@ import { Overview3Component } from './components/scooters/overview3component/ove
 import { Detail3Component } from './components/scooters/detail3/detail3.component';
 import { ScootersService } from './services/scooters.service';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { ErrorComponent } from './components/error-component/error-component.component';
+import { ErrorComponent } from './components/mainpage/error-component/error-component.component';
+import { Overview4Component } from './components/scooters/overview4component/overview4component.component';
+import { Detail4Component } from './components/scooters/detail4/detail4.component';
 
 
 // @ts-ignore
@@ -31,6 +33,8 @@ import { ErrorComponent } from './components/error-component/error-component.com
     Overview3Component,
     Detail3Component,
     ErrorComponent,
+    Overview4Component,
+    Detail4Component,
     // AutoFocusDirective
 
   ],
