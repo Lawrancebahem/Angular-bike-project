@@ -15,8 +15,7 @@ export class ScootersService {
   save(scooter:Scooter){
     let foundScooter = this.findById(scooter.id);
     if(foundScooter != null){
-      this.scooters.splice(this.scooters.indexOf(foundScooter), 1);
-      this.scooters.push(scooter);
+      this.scooters.splice(this.scooters.indexOf(foundScooter), 1, scooter);
     } else{
       this.scooters.push(scooter);
     }
