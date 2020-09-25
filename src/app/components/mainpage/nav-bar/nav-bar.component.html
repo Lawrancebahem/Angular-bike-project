@@ -1,9 +1,14 @@
 <nav>
   <ul>
     <li routerLink="/Home" routerLinkActive="active">Home</li>
-    <li routerLink="overview1" routerLinkActive="active">Scooter</li>
-    <li routerLink="overview2" routerLinkActive="active">Scooter2</li>
-    <li routerLink="overview3" routerLinkActive="active">Scooter3</li>
+    <li>Scooter
+      <!-- Sub menu -->
+      <ul class="menu--sub">
+        <li routerLink="overview1" routerLinkActive="active">Overview 1</li>
+        <li routerLink="overview2" routerLinkActive="active">Overview 2</li>
+        <li routerLink="overview3" routerLinkActive="active">Overview 3</li>
+      </ul>
+    </li>
     <li>My trips</li>
   </ul>
   <ul>

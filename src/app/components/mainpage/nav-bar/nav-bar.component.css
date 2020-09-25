@@ -20,6 +20,7 @@ li{
   padding: .5rem 1rem;
   border-radius: 2px;
   font-weight: bold;
+  position: relative;
 }
 
 li:hover{
@@ -27,4 +28,34 @@ li:hover{
   cursor: pointer;
   background-color: var(--color-red);
   color: var(--color-white);
+}
+
+.menu--sub{
+  padding: 0;
+  position: absolute;
+  top: 100%;
+  left:0;
+  background-color: var(--color-white);
+  box-shadow: 3px 3px 5px rgba(0,0,0,0.3);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+li:hover .menu--sub, .menu--sub:hover{
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.menu--sub li{
+  width: max-content;
+  border-radius: 0;
+}
+
+.menu--sub li:hover{
+  background-color: var(--color-red);
+}
+
+.menu--sub li:hover ~ ul{
+  background-color: var(--color-white);
 }
