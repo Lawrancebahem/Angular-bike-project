@@ -1,1 +1,27 @@
-<p>overview4component works!</p>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-6 border p-3">
+      <p>All list of scooters in your neighbourhood:</p>
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>Tag</th>
+          <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!--      Focus on this element by adding the class when it's the last element and not clicked  tabindex="0"-->
+        <tr [ngClass]="{'focusTd': scooter.id == scooterService.selectedScooter} "
+            (click)="getClickedScooter(scooter)" *ngFor="let scooter of getScooters()">
+          <td>{{scooter.tag}}</td>
+          <!--        <p>{{scooter.id === scooterService.previousSelected}}</p>-->
+          <td>{{scooter.getStatusToString()}}</td>
+        </tr>
+        </tbody>
+      </table>
+      <button (click)="addRandomWithFocusSelection();" class="btn btn-primary">Add Scooter</button>
+    </div>
+<!--    <app-detail3 class="col-6" [newSelectedScooter]="scooterService.selectedScooter"></app-detail3>-->
+    <router-outlet></router-outlet>
+  </div>
+</div>

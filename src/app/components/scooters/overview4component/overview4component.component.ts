@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {Scooter} from '../../../models/scooter';
+import {ScootersService} from '../../../services/scooters.service';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-overview4component',
@@ -6,10 +9,46 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./overview4component.component.css']
 })
 export class Overview4Component implements OnInit {
+  public selectedScooter: Scooter;
+  public newClickedScooterId;
+  public cancelButtonIsClicked: boolean;
+  public defaultScooter: Scooter = Scooter.createRandomScooter();
 
-  constructor() { }
-
-  ngOnInit(): void {
+  constructor(public scooterService: ScootersService,
+              private route:Router,
+              private activeRoute:ActivatedRoute) {
   }
 
+  ngOnInit(): void {
+
+  }
+
+  /**
+   * Get the the click scooter, and set teh this.clicked to true (for styling the last added element)
+   * @param scooter
+   */
+  public getClickedScooter(scooter: Scooter) {
+    this.route.navigate([scooter.id], {relativeTo:this.activeRoute})
+  }
+
+  /**
+   * To add random scooters
+   * @private
+   */
+  public addRandomScooters(): void {
+    this.scooterService.save(Scooter.createRandomScooter());
+  }
+
+  /**
+   * Set the focus on the last added scooter
+   */
+  public addRandomWithFocusSelection() {
+    this.selectedScooter = Scooter.createRandomScooter();
+    this.route.navigate([this.selectedScooter.id],{relativeTo:this.activeRoute});
+    this.scooterService.save(this.selectedScooter);
+  }
+
+  public getScooters(): Scooter[] {
+    return this.scooterService.findAll();
+  }
 }

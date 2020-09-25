@@ -27,12 +27,7 @@ export class ScootersService {
   }
 
   findById(scooterId):Scooter{
-    for(let scooter of this.scooters){
-      if(scooter.id == scooterId){
-        return scooter
-      }
-    }
-    return null;
+    return this.scooters.find(scooter => scooter.id === scooterId);
   }
 
   deleteById(id):Scooter{
