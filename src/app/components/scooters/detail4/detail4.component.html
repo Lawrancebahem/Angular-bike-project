@@ -1,1 +1,33 @@
-<p>detail4 works!</p>
+<div *ngIf="getScooterById() != null else noScooter" class="col">
+  <h3>Update scooter {{editedScooter.tag}} ({{-editedScooter.id}} | )</h3>
+
+  <label>Tag</label>
+  <input #tagInput (keyup)="checkValues()" class="form-control" type="text" [value]="editedScooter.tag">
+
+  <label>Status</label>
+  <select #statusInput (change)="checkValues()" class="form-control" name="" id="">
+    <option *ngFor="let i of statusesArray"
+            [attr.selected]="allStatuses[editedScooter.status] == allStatuses[i] ? true : null"
+            value="{{i}}">
+      {{allStatuses[i]}}</option>
+  </select>
+
+  <label>Gps-Location</label>
+
+  <input #gpsLocationInput (keyup)="checkValues()" class="form-control" type="text" [value]="editedScooter.gpsLocation">
+
+  <label>Mileage</label>
+  <input  #mileageInput (keyup)="checkValues()" class="form-control" type="text" [value]="editedScooter.setMileage">
+
+  <label>Battery Charge</label>
+  <input  #batteryChargeInput (keyup)="checkValues()" class="form-control" type="text" [value]="editedScooter.batteryCharge">
+  <br>
+  <div class="btn-group float-right" role="group" aria-label="Basic example">
+    <Button class="btn btn-primary float-right m-1" (click)="cancel()">Cancel</Button>
+    <Button class="btn btn-primary float-right m-1" (click)="clear()">Clear</Button>
+    <Button [disabled]="!hasChanged" class="btn btn-primary float-right m-1" (click)="reset()">Reset</Button>
+    <Button [disabled]="!hasChanged" class="btn btn-primary float-right m-1" (click)="saveOrUpdate()">Save</Button>
+    <Button [disabled]="hasChanged" class="btn btn-danger float-right m-1" (click)="deleteScooter(scooterService.selectedScooter)">Delete</Button>
+  </div>
+</div>
+<ng-template #noScooter><p class="col">Please select a scooter</p></ng-template>
