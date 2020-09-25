@@ -1,6 +1,7 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {Scooter} from '../../../models/scooter';
 import {ScootersService} from '../../../services/scooters.service';
+
 @Component({
   selector: 'app-overview3',
   templateUrl: './overview3.component.html',
@@ -10,10 +11,10 @@ export class Overview3Component implements OnInit {
 
   public selectedScooter: Scooter;
   public newClickedScooterId;
-  public selectedScooterId;
-  public cancelButtonIsClicked:boolean;
+  public cancelButtonIsClicked: boolean;
+  public defaultScooter: Scooter = Scooter.createRandomScooter();
 
-  constructor(public scooterService:ScootersService) {
+  constructor(public scooterService: ScootersService) {
   }
 
   ngOnInit(): void {
@@ -25,7 +26,9 @@ export class Overview3Component implements OnInit {
    * @param value
    */
   public getClickedScooter(value: Scooter) {
-    return this.selectedScooterId = value.id;
+    this.scooterService.previousSelected = this.scooterService.selectedScooter;
+    return this.scooterService.selectedScooter = value.id;
+
   }
 
   /**
@@ -41,11 +44,11 @@ export class Overview3Component implements OnInit {
    */
   public addRandomWithFocusSelection() {
     this.selectedScooter = Scooter.createRandomScooter();
-    this.selectedScooterId = this.selectedScooter.id;
+    this.scooterService.selectedScooter = this.selectedScooter.id;
     this.scooterService.save(this.selectedScooter);
   }
 
-  public getScooters():Scooter[]{
+  public getScooters(): Scooter[] {
     return this.scooterService.findAll();
   }
 }

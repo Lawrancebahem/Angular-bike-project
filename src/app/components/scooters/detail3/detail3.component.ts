@@ -1,16 +1,15 @@
 import {
+  ChangeDetectorRef,
   Component,
   ElementRef,
-  EventEmitter,
-  Input, OnChanges,
+  Input,
+  OnChanges,
   OnInit,
-  Output, SimpleChanges,
+  SimpleChanges,
   ViewChild
 } from '@angular/core';
 import {Scooter, ScooterStatus} from '../../../models/scooter';
 import {ScootersService} from '../../../services/scooters.service';
-import has = Reflect.has;
-
 
 @Component({
   selector: 'app-detail3',
@@ -20,36 +19,17 @@ import has = Reflect.has;
 
 export class Detail3Component implements OnInit, OnChanges {
 
-  //by emitting true for overview3 component
-  // which takes care of removing the selection focus from the selected scooter
-
-  @Output('removeSelectedScooter')
-  public removeSelectedScooter:EventEmitter<null> = new EventEmitter<null>();
-
-  // ngOnChanges(changes: SimpleChanges): void {
-    //   if (this.newClickedScooter){
-    //     setInterval(()=>{
-    //       this.checkValues()
-    //     },1000)
-    //   }
-    // }
-
-  // Selected scooter id from parent component
-  @Input('selectedScooterId')
-  public selectedScooterId: number;
-
   @Input('hasChanged')
-  public hasChanged:boolean;
+  public hasChanged: boolean;
 
-  public showDialog = false;
+  @Input('newSelectedScooter')
+  public newSelectedScooter;
   public statusesArray = this.statusScooter(ScooterStatus);
   public allStatuses = ScooterStatus;
   public deletedScooter;
   public editedScooter: Scooter;
-  private CONFIRM_MESSAGE = "You have unsaved changes. Do you want to proceed?";
+  private CONFIRM_MESSAGE = 'You have unsaved changes. Do you want to proceed?';
 
-  @Input('newClickedScooterId')
-  public newClickedScooter:Scooter;
   //Input elements
   @ViewChild('gpsLocationInput') gpsLocationInput: ElementRef;
   @ViewChild('statusInput') statusInput: ElementRef;
@@ -57,17 +37,39 @@ export class Detail3Component implements OnInit, OnChanges {
   @ViewChild('mileageInput') mileageInput: ElementRef;
   @ViewChild('batteryChargeInput') batteryChargeInput: ElementRef;
 
-  constructor(private scooterService: ScootersService) {
+  constructor(private scooterService: ScootersService,private cdRef:ChangeDetectorRef) {
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if(this.selectedScooterId){
-      this.hasChanged = false;
-    }
-  }
+
 
   ngOnInit(): void {
   }
+
+  ngAfterViewChecked() {
+    this.newSelectedScooter = this.scooterService.previousSelected;
+    this.cdRef.detectChanges();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    // if (this.newSelectedScooter) {
+    //   if (this.hasChanged) {
+    //     let confirmed = confirm(this.CONFIRM_MESSAGE);
+    //     if (!confirmed) {
+    //       this.scooterService.selectedScooter = this.scooterService.previousSelected;
+    //       this.hasChanged = true;
+    //     }else {
+    //       this.hasChanged = false;
+    //     }
+    //   }
+    // }
+
+    if (this.newSelectedScooter){
+      if (this.hasChanged){
+        this.hasChanged = false;
+      }
+    }
+  }
+
 
   /**
    * Delete a scooter using its id
@@ -75,9 +77,9 @@ export class Detail3Component implements OnInit, OnChanges {
    */
   public deleteScooter(id: number) {
     const confirmChanges = confirm(this.CONFIRM_MESSAGE);
-    if(confirmChanges){
+    if (confirmChanges) {
       this.deletedScooter = this.scooterService.deleteById(id);
-      this.selectedScooterId = -1;
+      this.scooterService.selectedScooter = null;
       return this.deletedScooter;
     }
   }
@@ -86,7 +88,7 @@ export class Detail3Component implements OnInit, OnChanges {
    * Get a scooter by its id
    */
   public getScooterById(): Scooter {
-    return this.editedScooter = this.scooterService.findById(this.selectedScooterId);
+    return this.editedScooter = this.scooterService.findById(this.scooterService.selectedScooter);
   }
 
   /**
@@ -105,7 +107,7 @@ export class Detail3Component implements OnInit, OnChanges {
    */
   public reset(): void {
     const confirmChanges = confirm(this.CONFIRM_MESSAGE);
-    if(this.hasChanged && confirmChanges){
+    if (this.hasChanged && confirmChanges) {
       this.tagInput.nativeElement.value = this.editedScooter.tag;
       this.gpsLocationInput.nativeElement.value = this.editedScooter.gpsLocation;
       this.mileageInput.nativeElement.value = this.editedScooter.setMileage;
@@ -119,8 +121,8 @@ export class Detail3Component implements OnInit, OnChanges {
    * To clear all fields
    */
   clear(): void {
-    const confirmChanges = this.hasChanged ? confirm(this.CONFIRM_MESSAGE) : confirm("Are you sure you want to clear all fields?");
-    if(confirmChanges){
+    const confirmChanges = this.hasChanged ? confirm(this.CONFIRM_MESSAGE) : confirm('Are you sure you want to clear all fields?');
+    if (confirmChanges) {
       this.tagInput.nativeElement.value = '';
       this.gpsLocationInput.nativeElement.value = '';
       this.mileageInput.nativeElement.value = '';
@@ -135,31 +137,31 @@ export class Detail3Component implements OnInit, OnChanges {
   cancel(): void {
     if (this.hasChanged) {
       let confirmChanges = confirm(this.CONFIRM_MESSAGE);
-      if(confirmChanges){
-        this.selectedScooterId = null;
-        this.removeSelectedScooter.emit();
+      if (confirmChanges) {
+        this.scooterService.selectedScooter = null;
       }
     } else {
-      this.selectedScooterId = null;
-      this.removeSelectedScooter.emit();
+      this.scooterService.selectedScooter = null;
     }
   }
 
-  public checkValues():boolean{
+  public checkValues(): boolean {
+
     return this.hasChanged = !this.compareScooter(this.editedScooter, this.getInputFieldsValues());
   }
+
   /**
    * Return a new edited scooter based on the new values
    * @private
    */
   private getInputFieldsValues(): Scooter {
-    if (this.selectedScooterId != -1) {
+    if (this.scooterService.selectedScooter != null) {
       let tag = this.tagInput.nativeElement.value;
       let gpsLocation = this.gpsLocationInput.nativeElement.value;
       let mileage = this.mileageInput.nativeElement.value;
       let batteryCharge = this.batteryChargeInput.nativeElement.value;
       let status = this.statusInput.nativeElement.value;
-      return new Scooter(this.selectedScooterId, tag, status, gpsLocation, mileage, batteryCharge);
+      return new Scooter(this.scooterService.selectedScooter, tag, status, gpsLocation, mileage, batteryCharge);
     }
   }
 
@@ -174,26 +176,13 @@ export class Detail3Component implements OnInit, OnChanges {
       .filter(n => !Number.isNaN(n)) as unknown as T[keyof T][];
   }
 
-  // /**
-  //  * To compare the values of the scooter
-  //  * @param scooter1
-  //  * @param scooter2
-  //  * @private
-  //  */
-  // public compare(scooter1: Scooter, scooter2: Scooter): boolean {
-  //   if(scooter1 != null && scooter2 != null){
-  //     return scooter1 == scooter2;
-  //   }
-  //   return false;
-  // }
-
   /**
    * To compare with values of the scooter
    * @param scooter1
    * @param scooter2
    */
-  public compareScooter(scooter1: Scooter, scooter2: Scooter): boolean{
-    if(scooter1 != null && scooter2 != null){
+  public compareScooter(scooter1: Scooter, scooter2: Scooter): boolean {
+    if (scooter1 != null && scooter2 != null) {
       // Create arrays of property names
       const props = Object.getOwnPropertyNames(scooter1);
 

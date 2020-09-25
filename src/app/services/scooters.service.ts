@@ -1,8 +1,10 @@
 import {Scooter} from "../models/scooter";
+import {EventEmitter, Input, Output} from '@angular/core';
 
 export class ScootersService {
   scooters:Scooter[];
-
+  public selectedScooter = -1;
+  public previousSelected;
   constructor() {
     this.scooters = [];
     for (let i = 0; i < 8; i++) {
@@ -41,4 +43,5 @@ export class ScootersService {
     }
     return null;
   }
+
 }

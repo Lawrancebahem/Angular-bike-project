@@ -27,7 +27,7 @@
     <Button class="btn btn-primary float-right m-1" (click)="clear()">Clear</Button>
     <Button [disabled]="!hasChanged" class="btn btn-primary float-right m-1" (click)="reset()">Reset</Button>
     <Button [disabled]="!hasChanged" class="btn btn-primary float-right m-1" (click)="saveOrUpdate()">Save</Button>
-    <Button [disabled]="hasChanged" class="btn btn-danger float-right m-1" (click)="deleteScooter(selectedScooterId)">Delete</Button>
+    <Button [disabled]="hasChanged" class="btn btn-danger float-right m-1" (click)="deleteScooter(scooterService.selectedScooter)">Delete</Button>
   </div>
 </div>
 <ng-template #noScooter><p class="col">Please select a scooter</p></ng-template>

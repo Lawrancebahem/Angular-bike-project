@@ -2,10 +2,10 @@ tr:hover{
   background-color: #c7c7c7 !important;
   cursor:pointer;
 }
-tr:focus {
-  background-color:  #c7c7c7 !important;
-  outline: 0; /*remove outline*/
-}
+/*tr:focus {*/
+/*  background-color:  #c7c7c7 !important;*/
+/*  outline: 0; !*remove outline*!*/
+/*}*/
 
 .focusTd{
   background-color:  #c7c7c7 !important;

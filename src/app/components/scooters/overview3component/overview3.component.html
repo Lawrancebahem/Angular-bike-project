@@ -9,15 +9,16 @@
       </tr>
       </thead>
       <tbody>
-      <!--      Focus on this element by adding the class when it's the last element and not clicked-->
-      <tr [ngClass]="{'focusTd': scooter.id === selectedScooterId && !cancelButtonIsClicked} " tabindex="0" (click)="getClickedScooter(scooter)" *ngFor="let scooter of getScooters()">
+      <!--      Focus on this element by adding the class when it's the last element and not clicked  tabindex="0"-->
+      <tr [ngClass]="{'focusTd': scooter.id == scooterService.selectedScooter} "
+          (click)="getClickedScooter(scooter)" *ngFor="let scooter of getScooters()">
         <td>{{scooter.tag}}</td>
+<!--        <p>{{scooter.id === scooterService.previousSelected}}</p>-->
         <td>{{scooter.getStatusToString()}}</td>
       </tr>
       </tbody>
     </table>
     <button (click)="addRandomWithFocusSelection();" class="btn btn-primary">Add Scooter</button>
   </div>
-  <app-detail3 [selectedScooterId]="selectedScooterId" [hasChanged]="newClickedScooterId != null" (removeSelectedScooter)="selectedScooterId = $event"></app-detail3>
+  <app-detail3 [newSelectedScooter]="scooterService.selectedScooter"></app-detail3>
 </div>
-
