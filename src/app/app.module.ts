@@ -17,6 +17,10 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ErrorComponent } from './components/mainpage/error-component/error-component.component';
 import { Overview4Component } from './components/scooters/overview4component/overview4component.component';
 import { Detail4Component } from './components/scooters/detail4/detail4.component';
+import {PendingChangesGuard} from './gurads/can-deactivate-component';
+import { Overview4qpComponent } from './components/scooters/overview4qp/overview4qp.component';
+import {Detail4qpComponent} from './components/scooters/detail4qp/detail4qp.component';
+
 
 
 // @ts-ignore
@@ -35,8 +39,9 @@ import { Detail4Component } from './components/scooters/detail4/detail4.componen
     ErrorComponent,
     Overview4Component,
     Detail4Component,
+    Overview4qpComponent,
+    Detail4qpComponent
     // AutoFocusDirective
-
   ],
   imports: [
     BrowserModule,
@@ -44,7 +49,7 @@ import { Detail4Component } from './components/scooters/detail4/detail4.componen
     AppRoutingModule,
     NoopAnimationsModule
   ],
-  providers: [ScootersService],
+  providers: [ScootersService ,PendingChangesGuard],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

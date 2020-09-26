@@ -7,6 +7,10 @@ import {Overview3Component} from './components/scooters/overview3component/overv
 import {ErrorComponent} from './components/mainpage/error-component/error-component.component';
 import {Overview4Component} from './components/scooters/overview4component/overview4component.component';
 import {Detail4Component} from './components/scooters/detail4/detail4.component';
+import {Detail41Component} from './components/scooters/detail41/detail41.component';
+import {PendingChangesGuard} from './gurads/can-deactivate-component';
+import {Detail4qpComponent} from './components/scooters/detail4qp/detail4qp.component';
+import {Overview4qpComponent} from './components/scooters/overview4qp/overview4qp.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -20,7 +24,23 @@ const routes: Routes = [
       {path: '',redirectTo: '-1', pathMatch: 'full'},
     ]
   },
-  {path: '**', component: ErrorComponent}
+  {path: 'overview41', component: Overview4Component,
+    children: [
+      {path: ':id', component: Detail41Component, canDeactivate:[PendingChangesGuard]},
+      {path: '',redirectTo: '-1', pathMatch: 'full'},
+    ]
+  },
+  {path: 'overview4qp', component: Overview4qpComponent,
+    children: [
+      {path: 'edit', component: Detail4qpComponent,
+        children: [
+          {path: '?id=:', component: Detail4qpComponent},
+          {path: '',redirectTo: '-1', pathMatch: 'full'},
+        ]
+      },
+    ]
+  },
+  // {path: '**', component: ErrorComponent},
 ];
 
 @NgModule({
