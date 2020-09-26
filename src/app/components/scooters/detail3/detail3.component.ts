@@ -41,7 +41,6 @@ export class Detail3Component implements OnInit, OnChanges {
   }
 
 
-
   ngOnInit(): void {
   }
 
@@ -195,7 +194,6 @@ export class Detail3Component implements OnInit, OnChanges {
           return false;
         }
       }
-
       // If we made it this far, objects
       // are considered equivalent
       return true;
