@@ -1,15 +1,16 @@
-import {ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit, SimpleChanges, ViewChild} from '@angular/core';
+import {Component, ElementRef, HostListener, Input, OnDestroy, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 import {Scooter, ScooterStatus} from '../../../models/scooter';
 import {ScootersService} from '../../../services/scooters.service';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {Subscription} from 'rxjs';
+import {CanDeactivateComponent} from '../../../gurads/can-deactivate-component';
 
 @Component({
   selector: 'app-detail4',
   templateUrl: './detail4.component.html',
   styleUrls: ['./detail4.component.css']
 })
-export class Detail4Component implements OnInit, OnDestroy {
+export class Detail4Component implements OnInit, OnDestroy, CanDeactivateComponent {
 
   public hasChanged: boolean;
   public selectedScooterId;
@@ -18,7 +19,7 @@ export class Detail4Component implements OnInit, OnDestroy {
   public deletedScooter;
   public editedScooter: Scooter;
   private CONFIRM_MESSAGE = 'You have unsaved changes. Do you want to proceed?';
-  private paramsSubscription: Subscription;
+  public paramsSubscription: Subscription;
 
   //Input elements
   @ViewChild('gpsLocationInput') gpsLocationInput: ElementRef;
@@ -27,17 +28,28 @@ export class Detail4Component implements OnInit, OnDestroy {
   @ViewChild('mileageInput') mileageInput: ElementRef;
   @ViewChild('batteryChargeInput') batteryChargeInput: ElementRef;
 
+  constructor(public scooterService: ScootersService,
+              public route: Router,
 
-  constructor(private scooterService: ScootersService,
-              private route: Router,
-              private activeRouter: ActivatedRoute) {
-  }
+              public activeRouter: ActivatedRoute) {}
+
+  canDeactivate(): boolean {
+    return this.hasChanged;
+    }
+
 
 
   ngOnInit(): void {
     this.paramsSubscription = this.activeRouter.params.subscribe((params: Params) => {
       this.hasChanged = false;
       this.selectedScooterId = Number(params['id']);
+      let foundScooter = this.getScooterById();
+
+      //if foundScooter is null and de param is not -1, that means that the use has entered a wrong url
+      //we need to navigate to a wrong url purposely to get the 404 page
+      if (foundScooter == null && params['id'] != -1){
+        this.route.navigate([params['id']])
+      }
     });
   }
 
@@ -112,14 +124,17 @@ export class Detail4Component implements OnInit, OnDestroy {
       let confirmChanges = confirm(this.CONFIRM_MESSAGE);
       if (confirmChanges) {
         this.selectedScooterId = -1;
+        this.route.navigate(["overview4"])
       }
     } else {
       this.selectedScooterId = -1;
+      this.route.navigate(["overview4"])
     }
   }
 
   public checkValues(): boolean {
-    return this.hasChanged = !this.compareScooter(this.editedScooter, this.getInputFieldsValues());
+    this.hasChanged = !this.compareScooter(this.editedScooter, this.getInputFieldsValues());
+    return this.hasChanged;
   }
 
   /**
