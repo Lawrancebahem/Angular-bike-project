@@ -86,7 +86,7 @@ export class Detail3Component implements OnInit, OnChanges {
   /**
    * Get a scooter by its id
    */
-  public getScooterById(): Scooter {
+    public getScooterById(): Scooter {
     return this.editedScooter = this.scooterService.findById(this.scooterService.selectedScooter);
   }
 
@@ -127,6 +127,7 @@ export class Detail3Component implements OnInit, OnChanges {
       this.mileageInput.nativeElement.value = '';
       this.batteryChargeInput.nativeElement.value = '';
       this.statusInput.nativeElement.value = '';
+      this.hasChanged = true;
     }
   }
 
