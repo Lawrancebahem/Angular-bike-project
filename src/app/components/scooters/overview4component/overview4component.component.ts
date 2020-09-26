@@ -16,12 +16,14 @@ export class Overview4Component implements OnInit {
   public defaultScooter: Scooter = Scooter.createRandomScooter();
   public selectedScooterId;
   constructor(public scooterService: ScootersService,
-              private route:Router,
-              private activeRoute:ActivatedRoute) {
+              protected router:Router,
+              protected activeRoute:ActivatedRoute) {
   }
 
   ngOnInit(): void {
-
+    this.activeRoute.firstChild.params.subscribe((params:Params)=>{
+        this.selectedScooterId = Number(params['id']);
+    })
   }
 
   /**
@@ -30,7 +32,7 @@ export class Overview4Component implements OnInit {
    */
   public getClickedScooter(scooter: Scooter) {
     this.selectedScooterId = scooter.id;
-    this.route.navigate([scooter.id], {relativeTo:this.activeRoute})
+    this.router.navigate([scooter.id], {relativeTo:this.activeRoute})
   }
 
   /**
@@ -46,7 +48,7 @@ export class Overview4Component implements OnInit {
    */
   public addRandomWithFocusSelection() {
     this.selectedScooter = Scooter.createRandomScooter();
-    this.route.navigate([this.selectedScooter.id],{relativeTo:this.activeRoute});
+    this.router.navigate([this.selectedScooter.id],{relativeTo:this.activeRoute});
     this.scooterService.save(this.selectedScooter);
   }
 

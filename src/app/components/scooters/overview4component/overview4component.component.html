@@ -11,7 +11,7 @@
         </thead>
         <tbody>
         <!--      Focus on this element by adding the class when it's the last element and not clicked  tabindex="0"-->
-        <tr [ngClass]="{'focusTd': scooter.id === selectedScooterId} "
+        <tr [ngClass]="{'focusTd': scooter.id === selectedScooterId}"
             (click)="getClickedScooter(scooter)" *ngFor="let scooter of getScooters()">
           <td>{{scooter.tag}}</td>
           <!--        <p>{{scooter.id === scooterService.previousSelected}}</p>-->
