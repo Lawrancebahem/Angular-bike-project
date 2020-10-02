@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Router} from "@angular/router";
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-error-component',
@@ -7,11 +7,10 @@ import {Router} from "@angular/router";
   styleUrls: ['./error-component.component.css']
 })
 export class ErrorComponent implements OnInit {
+  // tslint:disable-next-line:variable-name
   private _url = this.router.url;
 
-  constructor(
-    private router: Router
-  ) {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {}
 
