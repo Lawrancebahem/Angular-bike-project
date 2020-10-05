@@ -5,7 +5,6 @@ import {Scooter} from '../../../models/scooter';
   selector: 'app-overview2component',
   templateUrl: './overview2component.component.html',
   styleUrls: ['./overview2component.component.css'],
-
 })
 
 export class Overview2componentComponent implements OnInit {
@@ -61,6 +60,5 @@ export class Overview2componentComponent implements OnInit {
     this.focusLastElement = this.selectedScooter.id;
     this.clicked = false;
     this.scooters.push(this.selectedScooter);
-
   }
 }

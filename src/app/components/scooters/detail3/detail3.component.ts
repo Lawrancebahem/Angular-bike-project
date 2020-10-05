@@ -40,7 +40,6 @@ export class Detail3Component implements OnInit, OnChanges {
   constructor(public scooterService: ScootersService,private cdRef:ChangeDetectorRef) {
   }
 
-
   ngOnInit(): void {
   }
 
@@ -109,7 +108,7 @@ export class Detail3Component implements OnInit, OnChanges {
     if (this.hasChanged && confirmChanges) {
       this.tagInput.nativeElement.value = this.editedScooter.tag;
       this.gpsLocationInput.nativeElement.value = this.editedScooter.gpsLocation;
-      this.mileageInput.nativeElement.value = this.editedScooter.setMileage;
+      this.mileageInput.nativeElement.value = this.editedScooter.getMileage;
       this.batteryChargeInput.nativeElement.value = this.editedScooter.batteryCharge;
       this.statusInput.nativeElement.value = this.editedScooter.status;
       this.hasChanged = false;

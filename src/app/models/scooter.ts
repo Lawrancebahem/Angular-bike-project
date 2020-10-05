@@ -27,10 +27,10 @@ export class Scooter {
   private _status: ScooterStatus;
   private _gpsLocation: string;
   private _batteryCharge: number;
-  private _setMileage: number;
+  private _getMileage: number;
 
   constructor(_id: number, _tag: String, _status: ScooterStatus, _gpsLocation: string, _mileage: number, _batteryCharge: number) {
-    this._setMileage = _mileage;
+    this._getMileage = _mileage;
     this._batteryCharge = _batteryCharge;
     this._gpsLocation = _gpsLocation;
     this._status = _status;
@@ -194,12 +194,12 @@ export class Scooter {
     this._batteryCharge = value;
   }
 
-  get setMileage(): number {
-    return this._setMileage;
+  get getMileage(): number {
+    return this._getMileage;
   }
 
-  set setMileage(value: number) {
-    this._setMileage = value;
+  set getMileage(value: number) {
+    this._getMileage = value;
   }
 
   getStatusToString(){

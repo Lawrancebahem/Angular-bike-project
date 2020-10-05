@@ -16,8 +16,8 @@ export class Overview4Component implements OnInit {
   public defaultScooter: Scooter = Scooter.createRandomScooter();
   public selectedScooterId;
   constructor(public scooterService: ScootersService,
-              protected router:Router,
-              protected activeRoute:ActivatedRoute) {
+              protected router: Router,
+              protected activeRoute: ActivatedRoute) {
   }
 
   ngOnInit(): void {
