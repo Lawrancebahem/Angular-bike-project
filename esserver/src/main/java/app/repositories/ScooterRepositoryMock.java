@@ -1,6 +1,7 @@
 package app.repositories;
 
 
+import app.Exception.ResourceNotFound;
 import app.models.Scooter;
 import org.springframework.stereotype.Repository;
 
@@ -12,7 +13,6 @@ public class ScooterRepositoryMock implements ScooterRepository<Scooter> {
   private List<Scooter> scooterList = new ArrayList<>();
 
   public ScooterRepositoryMock() {
-
     for (int i = 0; i < 7; i++) {
       scooterList.add(Scooter.creatRandomScooter());
     }
@@ -24,13 +24,13 @@ public class ScooterRepositoryMock implements ScooterRepository<Scooter> {
   }
 
   @Override
-  public Scooter findById(int id) {
+  public Scooter findById(int id){
     for (Scooter scooter : scooterList){
       if (scooter.getId() == id){
         return scooter;
       }
     }
-    return null;
+    throw new ResourceNotFound("There is no scooter with such an id: " + id);
   }
 
   @Override
@@ -50,7 +50,8 @@ public class ScooterRepositoryMock implements ScooterRepository<Scooter> {
   }
 
   @Override
-  public boolean deleteById(int id) {
+  public boolean deleteById(int id){
+    findById(id);
     return this.scooterList.removeIf(scooter -> scooter.getId() == id);
   }
 }

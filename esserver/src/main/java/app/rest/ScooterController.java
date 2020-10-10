@@ -1,11 +1,16 @@
 package app.rest;
 
 
+import app.Exception.PreConditionalFailed;
+import app.Exception.ResourceNotFound;
 import app.models.Scooter;
 import app.repositories.ScooterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -13,7 +18,7 @@ import java.util.List;
 public class ScooterController {
 
   @Autowired
-  private ScooterRepository<Scooter>scooterRepository;
+  private ScooterRepository<Scooter> scooterRepository;
 
   @GetMapping("/scooters")
   public List<Scooter> getAllScooters() {
@@ -29,23 +34,28 @@ public class ScooterController {
 
 
   @GetMapping("/scooter/{id}")
-  public Scooter findScooterById(@PathVariable int id){
+  public Scooter findScooterById(@PathVariable int id) {
     return this.scooterRepository.findById(id);
   }
 
-//  @PostMapping
-//  public Scooter addScooter(@RequestBody Scooter scooter){
-//    return this.scooterRepository.save(scooter);
-//  }
+  @PostMapping
+  public ResponseEntity<Scooter> addScooter(@RequestBody Scooter scooter) {
+    Scooter savedScooter = this.scooterRepository.save(scooter);
+    URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("scooter/{id}").buildAndExpand(savedScooter).toUri();
+    return ResponseEntity.created(location).body(savedScooter);
+  }
 
-  @RequestMapping(value = "/scooter/{id}" , method = {RequestMethod.PUT, RequestMethod.POST})
-  public Scooter saveOrUpdateScooterPut(@PathVariable int id,@RequestBody Scooter scooter){
+  @RequestMapping(value = "/scooter/{id}", method = {RequestMethod.PUT, RequestMethod.POST})
+  public ResponseEntity<Scooter> saveOrUpdateScooter(@PathVariable int id, @RequestBody Scooter scooter) {
+    if (id != scooter.getId()) throw new PreConditionalFailed("The id does not match the given id in the body");
     scooter.setId(id);
-    return this.scooterRepository.save(scooter);
+    Scooter savedScooter = this.scooterRepository.save(scooter);
+    URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/scooter/{id}").buildAndExpand(savedScooter).toUri();
+    return ResponseEntity.created(location).body(savedScooter);
   }
 
   @DeleteMapping("/scooter/{id}")
-  public boolean deleteScooter(@PathVariable int id){
+  public boolean deleteScooter(@PathVariable int id) {
     return this.scooterRepository.deleteById(id);
   }
 }
