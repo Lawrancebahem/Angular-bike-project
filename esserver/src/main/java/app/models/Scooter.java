@@ -1,18 +1,25 @@
 package app.models;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import java.util.Random;
 
 public class Scooter {
 
   private final String randomString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+  //  @JsonView({ShowScooterSummary.class, ShowId.class, ShowTag.class, ShowCharge.class, ShowStatus.class})
+  @JsonView(ShowScooterSummary.class)
   private int id;
-  public static int uniqueId = 30000;
+  @JsonView(ShowScooterSummary.class)
   private String tag;
-  private String gpsLocation;
-  private int chargeBattery;
-  private double mileage;
+  @JsonView(ShowScooterSummary.class)
   private String status;
+  @JsonView(ShowScooterSummary.class)
+  private int chargeBattery;
 
+  public static int uniqueId = 30000;
+  private String gpsLocation;
+  private double mileage;
 
   public Scooter() {
     RandomScooterStatus<StatusScooter> randomScooterStatus = new RandomScooterStatus<>(StatusScooter.class);
@@ -176,6 +183,7 @@ public class Scooter {
 
   /**
    * To get a random status
+   *
    * @param <E>
    */
   static class RandomScooterStatus<E extends Enum<StatusScooter>> {
@@ -190,4 +198,8 @@ public class Scooter {
       return values[RND.nextInt(values.length)];
     }
   }
+
+  public class ShowScooterSummary {
+  }
+
 }

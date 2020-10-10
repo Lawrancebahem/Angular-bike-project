@@ -5,6 +5,7 @@ import app.Exception.PreConditionalFailed;
 import app.Exception.ResourceNotFound;
 import app.models.Scooter;
 import app.repositories.ScooterRepository;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -57,5 +58,11 @@ public class ScooterController {
   @DeleteMapping("/scooter/{id}")
   public boolean deleteScooter(@PathVariable int id) {
     return this.scooterRepository.deleteById(id);
+  }
+
+  @GetMapping("/scooters/summary")
+  @JsonView(Scooter.ShowScooterSummary.class)
+  public List<Scooter> getScootersSummary(){
+    return this.scooterRepository.findAll();
   }
 }
