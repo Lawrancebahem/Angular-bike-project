@@ -4,9 +4,7 @@ package app.rest;
 import app.models.Scooter;
 import app.repositories.ScooterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,9 +22,30 @@ public class ScooterController {
     );
   }
 
-
   @GetMapping("/scootersRandom")
   public List<Scooter> getRandomScooters() {
     return this.scooterRepository.findAll();
+  }
+
+
+  @GetMapping("/scooter/{id}")
+  public Scooter findScooterById(@PathVariable int id){
+    return this.scooterRepository.findById(id);
+  }
+
+//  @PostMapping
+//  public Scooter addScooter(@RequestBody Scooter scooter){
+//    return this.scooterRepository.save(scooter);
+//  }
+
+  @RequestMapping(value = "/scooter/{id}" , method = {RequestMethod.PUT, RequestMethod.POST})
+  public Scooter saveOrUpdateScooterPut(@PathVariable int id,@RequestBody Scooter scooter){
+    scooter.setId(id);
+    return this.scooterRepository.save(scooter);
+  }
+
+  @DeleteMapping("/scooter/{id}")
+  public boolean deleteScooter(@PathVariable int id){
+    return this.scooterRepository.deleteById(id);
   }
 }

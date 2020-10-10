@@ -1,11 +1,12 @@
 package app.models;
+
 import java.util.Random;
 
 public class Scooter {
 
   private final String randomString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
   private int id;
-  private static int uniqueId = 30000;
+  public static int uniqueId = 30000;
   private String tag;
   private String gpsLocation;
   private int chargeBattery;
@@ -98,6 +99,7 @@ public class Scooter {
 
   /**
    * To generate random tag
+   *
    * @param lengthOfCode
    * @param possible
    * @return
@@ -134,6 +136,9 @@ public class Scooter {
     return status;
   }
 
+  public void setId(int id) {
+    this.id = id;
+  }
 
   /**
    * GeoLocation class to be hold the random latitude and the longitude with the calculated distance
