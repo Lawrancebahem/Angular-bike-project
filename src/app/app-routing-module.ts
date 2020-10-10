@@ -40,7 +40,7 @@ const routes: Routes = [
       },
     ]
   },
-  // {path: '**', component: ErrorComponent},
+  {path: '**', component: ErrorComponent},
 ];
 
 @NgModule({

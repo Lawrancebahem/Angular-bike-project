@@ -18,7 +18,6 @@ export class Overview3Component implements OnInit {
   }
 
   ngOnInit(): void {
-
   }
 
   /**
@@ -28,7 +27,6 @@ export class Overview3Component implements OnInit {
   public getClickedScooter(value: Scooter) {
     this.scooterService.previousSelected = this.scooterService.selectedScooter;
     return this.scooterService.selectedScooter = value.id;
-
   }
 
   /**

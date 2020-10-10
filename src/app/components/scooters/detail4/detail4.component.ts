@@ -30,14 +30,11 @@ export class Detail4Component implements OnInit, OnDestroy, CanDeactivateCompone
 
   constructor(public scooterService: ScootersService,
               public route: Router,
-
               public activeRouter: ActivatedRoute) {}
 
   canDeactivate(): boolean {
     return this.hasChanged;
-    }
-
-
+  }
 
   ngOnInit(): void {
     this.paramsSubscription = this.activeRouter.params.subscribe((params: Params) => {
@@ -95,7 +92,7 @@ export class Detail4Component implements OnInit, OnDestroy, CanDeactivateCompone
     if (this.hasChanged && confirmChanges) {
       this.tagInput.nativeElement.value = this.editedScooter.tag;
       this.gpsLocationInput.nativeElement.value = this.editedScooter.gpsLocation;
-      this.mileageInput.nativeElement.value = this.editedScooter.setMileage;
+      this.mileageInput.nativeElement.value = this.editedScooter.getMileage;
       this.batteryChargeInput.nativeElement.value = this.editedScooter.batteryCharge;
       this.statusInput.nativeElement.value = this.editedScooter.status;
       this.hasChanged = false;
