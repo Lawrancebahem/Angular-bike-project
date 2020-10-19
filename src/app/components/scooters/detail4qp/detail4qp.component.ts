@@ -12,6 +12,7 @@ export class Detail4qpComponent extends Detail4Component{
     this.paramsSubscription = this.activeRouter.queryParamMap
       .subscribe((params) => {
         let id = Number(params['params'].id);
+        console.log(" The id is  " + id)
       this.hasChanged = false;
       this.selectedScooterId = id;
     });

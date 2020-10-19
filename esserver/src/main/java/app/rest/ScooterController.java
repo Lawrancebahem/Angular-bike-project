@@ -15,13 +15,18 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/scooter")
+@RequestMapping("/scooters")
 public class ScooterController {
 
   @Autowired
   private ScooterRepository<Scooter> scooterRepository;
 
-  @GetMapping("/scooters")
+  @GetMapping
+  public List<Scooter>getScooters(){
+    return this.scooterRepository.findAll();
+  }
+
+  @GetMapping("/scooter")
   public List<Scooter> getAllScooters() {
     return List.of(new Scooter("Test-scooter-A"),
       new Scooter("Test-scooter-B")

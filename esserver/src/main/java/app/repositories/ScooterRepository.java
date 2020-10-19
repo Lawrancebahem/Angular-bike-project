@@ -1,6 +1,6 @@
 package app.repositories;
 import app.Exception.ResourceNotFound;
-import app.models.Scooter;
+
 
 import java.util.List;
 
