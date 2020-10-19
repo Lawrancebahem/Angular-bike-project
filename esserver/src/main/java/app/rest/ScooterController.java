@@ -2,7 +2,6 @@ package app.rest;
 
 
 import app.Exception.PreConditionalFailed;
-import app.Exception.ResourceNotFound;
 import app.models.Scooter;
 import app.repositories.ScooterRepository;
 import com.fasterxml.jackson.annotation.JsonView;

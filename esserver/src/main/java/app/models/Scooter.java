@@ -1,5 +1,6 @@
 package app.models;
 
+import app.Main;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import java.util.Random;
@@ -13,7 +14,7 @@ public class Scooter {
   @JsonView(ShowScooterSummary.class)
   private String tag;
   @JsonView(ShowScooterSummary.class)
-  private String status;
+  private StatusScooter status;
   @JsonView(ShowScooterSummary.class)
   private int chargeBattery;
 
@@ -21,17 +22,19 @@ public class Scooter {
   private String gpsLocation;
   private double mileage;
 
+  StatusScooter[] statusArray = StatusScooter.values();
+  Random random = new Random();
+
   public Scooter() {
-    RandomScooterStatus<StatusScooter> randomScooterStatus = new RandomScooterStatus<>(StatusScooter.class);
+    int randomIndex = random.nextInt(3);
     GeoLocation geoLocation = randomGeo(52.377956, 4.897070);
     this.id = uniqueId++;
-    this.status = randomScooterStatus.random() + "";
+    this.status = statusArray[randomIndex];
     this.tag = generateRandomTag(8, randomString);
     this.gpsLocation = geoLocation.lat + ", " + geoLocation.lon;
     this.chargeBattery = 0;
     this.mileage = geoLocation.distance;
     this.chargeBattery = generateRandomCharge();
-
   }
 
   public Scooter(String tag) {
@@ -50,7 +53,6 @@ public class Scooter {
 
   /**
    * Generate random GeoLocation
-   *
    * @param latitude
    * @param longitude
    * @return
@@ -78,7 +80,6 @@ public class Scooter {
 
   /**
    * Calcualte the distance between two distances
-   *
    * @param lat1
    * @param lon1
    * @param lat2
@@ -106,7 +107,6 @@ public class Scooter {
 
   /**
    * To generate random tag
-   *
    * @param lengthOfCode
    * @param possible
    * @return
@@ -139,7 +139,7 @@ public class Scooter {
     return mileage;
   }
 
-  public String getStatus() {
+  public StatusScooter getStatus() {
     return status;
   }
 
@@ -179,24 +179,6 @@ public class Scooter {
     IDLE,
     IN_USE,
     MAINTENANCE
-  }
-
-  /**
-   * To get a random status
-   *
-   * @param <E>
-   */
-  static class RandomScooterStatus<E extends Enum<StatusScooter>> {
-    Random RND = new Random();
-    E[] values;
-
-    public RandomScooterStatus(Class<E> token) {
-      values = token.getEnumConstants();
-    }
-
-    public E random() {
-      return values[RND.nextInt(values.length)];
-    }
   }
 
   public class ShowScooterSummary {
