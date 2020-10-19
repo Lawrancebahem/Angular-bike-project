@@ -46,7 +46,6 @@ public class Scooter {
     return new Scooter();
   }
 
-
   public int generateRandomCharge() {
     return (int) Math.floor(5 + Math.random() * (100 + 1 - 5));
   }
@@ -101,7 +100,8 @@ public class Scooter {
       } else if (unit.equals("N")) {
         dist = dist * 0.8684;
       }
-      return (double) Math.round(dist * 100) / 100;
+      int random = (int)(Math.random() * 1000);
+      return (double) (Math.round(dist * 100) / 100) + random;
     }
   }
 

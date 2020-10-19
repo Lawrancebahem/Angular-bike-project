@@ -18,7 +18,7 @@ import java.util.List;
 public class ScooterController {
 
   @Autowired
-  private ScooterRepository<Scooter> scooterRepository;
+  private ScooterRepository scooterRepository;
 
   @GetMapping
   public List<Scooter>getScooters(){

@@ -1,14 +1,15 @@
 package app.repositories;
 import app.Exception.ResourceNotFound;
+import app.models.Scooter;
 
 
 import java.util.List;
 
-public interface ScooterRepository<E> {
-  List<E>findAll();
+public interface ScooterRepository {
+  List<Scooter>findAll();
 
-  E findById(int id) throws ResourceNotFound;
-  E save(E e) throws ResourceNotFound;
+  Scooter findById(int id) throws ResourceNotFound;
+  Scooter save(Scooter e) throws ResourceNotFound;
 
   boolean deleteById(int id) throws ResourceNotFound;
 }
