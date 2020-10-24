@@ -3,12 +3,13 @@ package app.repositories;
 
 import app.Exception.ResourceNotFound;
 import app.models.Scooter;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
+import javax.security.sasl.SaslClient;
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository
+@Service("scooterRepositoryMock")
 public class ScooterRepositoryMock implements ScooterRepository {
   private final List<Scooter> scooterList = new ArrayList<>();
 
@@ -30,7 +31,7 @@ public class ScooterRepositoryMock implements ScooterRepository {
         return scooter;
       }
     }
-    throw new ResourceNotFound("There is no scooter with such an id: " + id);
+    return null;
   }
 
   @Override
@@ -43,7 +44,6 @@ public class ScooterRepositoryMock implements ScooterRepository {
       this.scooterList.add(scooter);
     }else {
       int indexPreviousScooter = this.scooterList.indexOf(foundScooter);
-      scooter.setId(foundScooter.getId());
       this.scooterList.set(indexPreviousScooter, scooter);
     }
     return scooter;
@@ -51,7 +51,6 @@ public class ScooterRepositoryMock implements ScooterRepository {
 
   @Override
   public boolean deleteById(int id){
-    findById(id);
     return this.scooterList.removeIf(scooter -> scooter.getId() == id);
   }
 }

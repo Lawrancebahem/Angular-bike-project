@@ -15,7 +15,7 @@ export enum ScooterStatus {
 
 /**
  * Scooter class
- * @author Lawrance Bahem
+ * @author Lawrance Bahem, Marc Specht
  */
 export class Scooter {
   private static _startingCode = 30001;
@@ -39,7 +39,6 @@ export class Scooter {
     this._tag = _tag;
     this._status = _status;
   }
-
   /**
    * Create a random scooter with random information
    */
@@ -122,6 +121,12 @@ export class Scooter {
     const a = 0.5 - Math.cos((lat2 - lat1) * Math.PI / 180) / 2 + Math.cos(lat1 * Math.PI / 180)
       * Math.cos(lat2 * Math.PI / 180) * (1 - Math.cos((lon2 - lon1) * Math.PI / 180)) / 2;
     return Math.round(R * 2 * Math.asin(Math.sqrt(a)));
+  }
+
+
+  static trueCopy(scooter:Scooter):Scooter{
+    // @ts-ignore
+    return scooter != null ? Object.assign(new Scooter(), scooter) : null;
   }
 
   /**

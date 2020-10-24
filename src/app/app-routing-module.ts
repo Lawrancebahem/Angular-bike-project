@@ -11,6 +11,8 @@ import {Detail41Component} from './components/scooters/detail41/detail41.compone
 import {PendingChangesGuard} from './gurads/can-deactivate-component';
 import {Detail4qpComponent} from './components/scooters/detail4qp/detail4qp.component';
 import {Overview4qpComponent} from './components/scooters/overview4qp/overview4qp.component';
+import {Overview5Component} from './components/scooters/overview5/overview5.component';
+import {Detail5Component} from './components/scooters/detail5/detail5.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -40,6 +42,13 @@ const routes: Routes = [
       },
     ]
   },
+  {path: 'overview5', component: Overview5Component,
+    children: [
+      {path: ':id', component: Detail5Component},
+      {path: '',redirectTo: '-1', pathMatch: 'full'},
+    ]
+  },
+
   {path: '**', component: ErrorComponent},
 ];
 

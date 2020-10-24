@@ -2,6 +2,7 @@ package app.rest;
 
 
 import app.Exception.PreConditionalFailed;
+import app.Exception.ResourceNotFound;
 import app.models.Scooter;
 import app.repositories.ScooterRepository;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -12,7 +13,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/scooters")
 public class ScooterController {
@@ -40,6 +41,8 @@ public class ScooterController {
 
   @GetMapping("/scooter/{id}")
   public Scooter findScooterById(@PathVariable int id) {
+    Scooter foundScooter = scooterRepository.findById(id);
+    if (foundScooter == null) throw new ResourceNotFound("The id does not exist");
     return this.scooterRepository.findById(id);
   }
 
@@ -61,10 +64,12 @@ public class ScooterController {
 
   @DeleteMapping("/scooter/{id}")
   public boolean deleteScooter(@PathVariable int id) {
+    Scooter foundScooter = scooterRepository.findById(id);
+    if (foundScooter == null) throw new ResourceNotFound("The id does not exist");
     return this.scooterRepository.deleteById(id);
   }
 
-  @GetMapping("/scooters/summary")
+  @GetMapping("/scooter s/summary")
   @JsonView(Scooter.ShowScooterSummary.class)
   public List<Scooter> getScootersSummary(){
     return this.scooterRepository.findAll();

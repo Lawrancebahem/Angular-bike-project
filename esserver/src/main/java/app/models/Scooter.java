@@ -1,6 +1,5 @@
 package app.models;
 
-import app.Main;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import java.util.Random;
