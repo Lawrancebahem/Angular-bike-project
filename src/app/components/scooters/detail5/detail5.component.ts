@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterContentChecked, AfterViewChecked, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Scooter, ScooterStatus} from '../../../models/scooter';
 import {Subscription} from 'rxjs';
 import {ScootersService} from '../../../services/scooters.service';
@@ -10,15 +10,16 @@ import {ScooterSbServiceService} from '../../../services/scooter-sb-service.serv
   templateUrl: './detail5.component.html',
   styleUrls: ['./detail5.component.css']
 })
-export class Detail5Component implements OnInit {
+export class Detail5Component implements OnInit{
   public hasChanged: boolean;
-  public selectedScooterId;
+  public selectedScooterId = 0;
   public statusesArray = this.statusScooter(ScooterStatus);
   public allStatuses = ScooterStatus;
   public deletedScooter;
   public editedScooter: Scooter;
   private CONFIRM_MESSAGE = 'You have unsaved changes. Do you want to proceed?';
   public paramsSubscription: Subscription;
+
 
   //Input elements
   @ViewChild('gpsLocationInput') gpsLocationInput: ElementRef;
@@ -29,21 +30,13 @@ export class Detail5Component implements OnInit {
 
   constructor(public scooterSbServiceService: ScooterSbServiceService,
               public route: Router,
-              public activeRouter: ActivatedRoute) {}
-
-
+              public activeRouter: ActivatedRoute) {
+  }
 
   ngOnInit(): void {
     this.paramsSubscription = this.activeRouter.params.subscribe((params: Params) => {
       this.hasChanged = false;
       this.selectedScooterId = Number(params['id']);
-      let foundScooter = this.getScooterById();
-
-      // //if foundScooter is null and de param is not -1, that means that the use has entered a wrong url
-      // //we need to navigate to a wrong url purposely to get the 404 page
-      // if (foundScooter == null && params['id'] != -1){
-      //   this.route.navigate(  [params['id']])
-      // }
     });
   }
 
@@ -68,7 +61,8 @@ export class Detail5Component implements OnInit {
    * Get a scooter by its id
    */
   public getScooterById(): Scooter {
-    return this.editedScooter = this.scooterSbServiceService.findById(this.selectedScooterId);
+    const scooter = this.editedScooter = this.scooterSbServiceService.findById(this.selectedScooterId);
+    return scooter;
   }
 
   /**
@@ -77,7 +71,11 @@ export class Detail5Component implements OnInit {
   public saveOrUpdate(): void {
     let newEditedScooter = this.getInputFieldsValues();
     //Add or update
-    this.scooterSbServiceService.save(newEditedScooter);
+    this.scooterSbServiceService.save(newEditedScooter).subscribe((response) => {
+      console.log(response);
+    }, error => {
+      console.log(error);
+    });
     this.hasChanged = false;
   }
 
@@ -118,11 +116,11 @@ export class Detail5Component implements OnInit {
       let confirmChanges = confirm(this.CONFIRM_MESSAGE);
       if (confirmChanges) {
         this.selectedScooterId = -1;
-        this.route.navigate(["overview5"])
+        this.route.navigate(['overview5']);
       }
     } else {
       this.selectedScooterId = -1;
-      this.route.navigate(["overview5"])
+      this.route.navigate(['overview5']);
     }
   }
 
@@ -142,7 +140,9 @@ export class Detail5Component implements OnInit {
       let mileage = this.mileageInput.nativeElement.value;
       let batteryCharge = this.batteryChargeInput.nativeElement.value;
       let status = this.statusInput.nativeElement.value;
-      return new Scooter(this.selectedScooterId, tag, status, gpsLocation, mileage, batteryCharge);
+      // @ts-ignore
+      let statusScooter: ScooterStatus = ScooterStatus[status];
+      return new Scooter(this.selectedScooterId, tag, statusScooter, gpsLocation, mileage, batteryCharge);
     }
   }
 

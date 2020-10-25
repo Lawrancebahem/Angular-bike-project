@@ -55,8 +55,8 @@ public class ScooterController {
 
   @RequestMapping(value = "/scooter/{id}", method = {RequestMethod.PUT, RequestMethod.POST})
   public ResponseEntity<Scooter> saveOrUpdateScooter(@PathVariable int id, @RequestBody Scooter scooter) {
+    System.out.println("The parm id " + id + " and the scooter id " + scooter.getId());
     if (id != scooter.getId()) throw new PreConditionalFailed("The id does not match the given id in the body");
-    scooter.setId(id);
     Scooter savedScooter = this.scooterRepository.save(scooter);
     URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/scooter/{id}").buildAndExpand(savedScooter).toUri();
     return ResponseEntity.created(location).body(savedScooter);

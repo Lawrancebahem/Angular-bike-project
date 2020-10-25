@@ -2,12 +2,12 @@ import {Injectable} from '@angular/core';
 import {Scooter} from '../models/scooter';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
+import {share, shareReplay} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ScooterSbServiceService {
-
   private URL = 'http://localhost:8080/scooters';
   scooters: Scooter[];
   public selectedScooter = -1;
@@ -15,33 +15,18 @@ export class ScooterSbServiceService {
 
   constructor(private httpClient: HttpClient) {
     this.scooters = [];
-    const  scoo = this.getRandom();
-    this.resPostScooter(scoo).subscribe((response)=>{
-      console.log("Has been added")
-    },error => {
-      console.log(error);
-    });
-    console.log(scoo)
-    this.restGetScooters().subscribe((scooters) => {
-      for (let scooter of scooters) {
-        let newScooter = Scooter.trueCopy(scooter);
-        if (newScooter != null) {
-          this.scooters.push(newScooter);
-        }
-      }
-    }, error => {
-      console.log(error);
-    });
-
+    this.restGetScooters();
   }
 
   // TO-DO: Return previous scooter else null
-  save(scooter: Scooter) {
+  save(scooter: Scooter): Observable<Scooter> {
     let foundScooter = this.findById(scooter.id);
     if (foundScooter != null) {
       this.scooters.splice(this.scooters.indexOf(foundScooter), 1, scooter);
+      return this.resPutScooter(scooter);
     } else {
       this.scooters.push(scooter);
+      return this.resPostScooter(scooter);
     }
   }
 
@@ -53,32 +38,45 @@ export class ScooterSbServiceService {
     return this.scooters.find(scooter => scooter.id === scooterId);
   }
 
-  deleteById(id): Scooter {
+
+  deleteById(id) {
     let foundScooter = this.findById(id);
     if (foundScooter != null) {
       this.scooters.splice(this.scooters.indexOf(foundScooter), 1);
+      this.resDeleteScooter(id);
       return foundScooter;
     }
     return null;
   }
 
+  /**
+   * GET request to get the list of scooters
+   * @private
+   */
   private restGetScooters(): Observable<Scooter[]> {
-    return this.httpClient.get<Scooter[]>(this.URL);
+    let observable = this.httpClient.get<Scooter[]>(this.URL).pipe(shareReplay(1));
+    observable.subscribe((scooters)=>{
+      this.scooters = scooters ? scooters.map((scooter) => Scooter.trueCopy(scooter)):[];
+    },error => {
+      console.log(error);
+    })
+    return observable;
   }
 
 
+  /**
+   * Post request to add a new scooter
+   * @param scooter
+   */
   public resPostScooter(scooter: Scooter): Observable<Scooter> {
-    const postData = {
-      id: scooter.id,
-      tag: scooter.tag,
-      status: scooter.status,
-      chargeBattery: scooter.batteryCharge,
-      gpsLocation: scooter.gpsLocation,
-      mileage: scooter.getMileage
-    };
-    return this.httpClient.post<Scooter>(this.URL, postData);
+    let observable = this.httpClient.post<Scooter>(this.URL, scooter).pipe(shareReplay(1));
+    return observable;
   }
 
+  /**
+   * Update request to update a scooter
+   * @param scooter
+   */
   public resPutScooter(scooter: Scooter): Observable<Scooter> {
     const toUpdateScooter = {
       id: scooter.id,
@@ -88,18 +86,19 @@ export class ScooterSbServiceService {
       gpsLocation: scooter.gpsLocation,
       mileage: scooter.getMileage
     };
-    return this.httpClient.put<Scooter>(this.URL + '/scooter/' + scooter.id, toUpdateScooter);
+    let observable = this.httpClient.put<Scooter>((this.URL + '/scooter/' + scooter.id), toUpdateScooter).pipe(shareReplay(1));
+    return observable;
   }
 
+  /**
+   * Delete request based on the give id in the parameters
+   * @param id
+   */
   public resDeleteScooter(id: number): void {
     this.httpClient.delete(this.URL + '/scooter/' + id).subscribe((response) => {
       console.log('The scooter with that id ' + id + ' has been deleted');
     }, error => {
       console.log(error);
     });
-  }
-
-  private getRandom(): Scooter {
-    return Scooter.createRandomScooter();
   }
 }

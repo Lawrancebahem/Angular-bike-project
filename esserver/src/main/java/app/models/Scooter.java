@@ -21,6 +21,9 @@ public class Scooter {
   private String gpsLocation;
   private double mileage;
 
+//  private _batteryCharge: number;
+//  private _getMileage: number;
+
   StatusScooter[] statusArray = StatusScooter.values();
   Random random = new Random();
 

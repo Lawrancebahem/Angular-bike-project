@@ -125,8 +125,8 @@ export class Scooter {
 
 
   static trueCopy(scooter:Scooter):Scooter{
-    // @ts-ignore
-    return scooter != null ? Object.assign(new Scooter(), scooter) : null;
+    const newScooter = this.createRandomScooter();
+    return scooter != null ? Object.assign(newScooter, scooter) : null;
   }
 
   /**

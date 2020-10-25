@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import {Scooter} from '../../../models/scooter';
-import {ScootersService} from '../../../services/scooters.service';
+import {Component, OnInit} from '@angular/core';
+import {Scooter, ScooterStatus} from '../../../models/scooter';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {ScooterSbServiceService} from '../../../services/scooter-sb-service.service';
 
@@ -12,9 +11,6 @@ import {ScooterSbServiceService} from '../../../services/scooter-sb-service.serv
 export class Overview5Component implements OnInit {
 
   public selectedScooter: Scooter;
-  public newClickedScooterId;
-  public cancelButtonIsClicked: boolean;
-  public defaultScooter: Scooter = Scooter.createRandomScooter();
   public selectedScooterId;
   constructor(public scooterSbService: ScooterSbServiceService,
               protected router: Router,
@@ -41,7 +37,11 @@ export class Overview5Component implements OnInit {
    * @private
    */
   public addRandomScooters(): void {
-    this.scooterSbService.save(Scooter.createRandomScooter());
+    this.scooterSbService.save(Scooter.createRandomScooter()).subscribe((response)=>{
+      console.log(response);
+    },error => {
+      console.log(error);
+    });
   }
 
   /**
@@ -49,8 +49,14 @@ export class Overview5Component implements OnInit {
    */
   public addRandomWithFocusSelection() {
     this.selectedScooter = Scooter.createRandomScooter();
+    const scooterStatus:any = ScooterStatus[this.selectedScooter.status];
+    this.selectedScooter.status = scooterStatus;
     this.router.navigate([this.selectedScooter.id],{relativeTo:this.activeRoute});
-    this.scooterSbService.save(this.selectedScooter);
+    this.scooterSbService.save(this.selectedScooter).subscribe((response)=>{
+      console.log(response);
+    },error => {
+      console.log(error);
+    });
   }
 
   public getScooters(): Scooter[] {
