@@ -39,7 +39,7 @@ public class ScooterController {
   }
 
 
-  @GetMapping("/scooter/{id}")
+  @GetMapping("/{id}")
   public Scooter findScooterById(@PathVariable int id) {
     Scooter foundScooter = scooterRepository.findById(id);
     if (foundScooter == null) throw new ResourceNotFound("The id does not exist");
@@ -53,23 +53,22 @@ public class ScooterController {
     return ResponseEntity.created(location).body(savedScooter);
   }
 
-  @RequestMapping(value = "/scooter/{id}", method = {RequestMethod.PUT, RequestMethod.POST})
+  @RequestMapping(value = "/{id}", method = {RequestMethod.PUT, RequestMethod.POST})
   public ResponseEntity<Scooter> saveOrUpdateScooter(@PathVariable int id, @RequestBody Scooter scooter) {
     if (id != scooter.getId()) throw new PreConditionalFailed("The id does not match the given id in the body");
-    scooter.setId(id);
     Scooter savedScooter = this.scooterRepository.save(scooter);
     URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/scooter/{id}").buildAndExpand(savedScooter).toUri();
     return ResponseEntity.created(location).body(savedScooter);
   }
 
-  @DeleteMapping("/scooter/{id}")
+  @DeleteMapping("/{id}")
   public boolean deleteScooter(@PathVariable int id) {
     Scooter foundScooter = scooterRepository.findById(id);
     if (foundScooter == null) throw new ResourceNotFound("The id does not exist");
     return this.scooterRepository.deleteById(id);
   }
 
-  @GetMapping("/scooter s/summary")
+  @GetMapping("/summary")
   @JsonView(Scooter.ShowScooterSummary.class)
   public List<Scooter> getScootersSummary(){
     return this.scooterRepository.findAll();
