@@ -12,7 +12,7 @@ export class ScootersService {
     }
   }
 
-  // TO-DO: Return previous scooter else null
+  // TODO: Return previous scooter else null
   save(scooter:Scooter){
     let foundScooter = this.findById(scooter.id);
     if(foundScooter != null){

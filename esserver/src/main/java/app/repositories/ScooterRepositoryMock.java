@@ -39,13 +39,15 @@ public class ScooterRepositoryMock implements ScooterRepository {
     if (scooter.getId() == 0){
       scooter.setId(Scooter.uniqueId++);
     }
-    Scooter foundScooter = findById(scooter.getId());
-    if (foundScooter == null){
+    // Argument object is not the same as our list object so we need
+    // to check if the scooter exists in our list
+    int index = this.scooterList.indexOf(findById(scooter.getId()));
+    if(index > -1){
+      this.scooterList.set(index, scooter);
+    } else{
       this.scooterList.add(scooter);
-    }else {
-      int indexPreviousScooter = this.scooterList.indexOf(foundScooter);
-      this.scooterList.set(indexPreviousScooter, scooter);
     }
+
     return scooter;
   }
 
