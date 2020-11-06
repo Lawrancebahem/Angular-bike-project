@@ -43,7 +43,7 @@ public class ScooterController {
   public Scooter findScooterById(@PathVariable int id) {
     Scooter foundScooter = scooterRepository.findById(id);
     if (foundScooter == null) throw new ResourceNotFound("The id does not exist");
-    return this.scooterRepository.findById(id);
+    return foundScooter;
   }
 
   @PostMapping

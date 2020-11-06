@@ -86,7 +86,7 @@ export class ScooterSbServiceService {
       gpsLocation: scooter.gpsLocation,
       mileage: scooter.getMileage
     };
-    let observable = this.httpClient.put<Scooter>((this.URL + '/scooter/' + scooter.id), toUpdateScooter).pipe(shareReplay(1));
+    let observable = this.httpClient.put<Scooter>((this.URL + '/' + scooter.id), toUpdateScooter).pipe(shareReplay(1));
     return observable;
   }
 
@@ -95,7 +95,7 @@ export class ScooterSbServiceService {
    * @param id
    */
   public resDeleteScooter(id: number): void {
-    this.httpClient.delete(this.URL + '/scooter/' + id).subscribe((response) => {
+    this.httpClient.delete(this.URL + '/' + id).subscribe((response) => {
       console.log('The scooter with that id ' + id + ' has been deleted');
     }, error => {
       console.log(error);

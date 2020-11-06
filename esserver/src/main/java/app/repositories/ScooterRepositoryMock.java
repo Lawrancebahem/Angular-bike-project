@@ -11,6 +11,7 @@ import java.util.List;
 
 @Service("scooterRepositoryMock")
 public class ScooterRepositoryMock implements ScooterRepository {
+
   private final List<Scooter> scooterList = new ArrayList<>();
 
   public ScooterRepositoryMock() {
