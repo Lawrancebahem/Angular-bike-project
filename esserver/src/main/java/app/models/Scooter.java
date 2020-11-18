@@ -1,42 +1,53 @@
 package app.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
-public class Scooter {
 
+@Entity
+public class Scooter {
+  @Transient
   private final String randomString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
   //  @JsonView({ShowScooterSummary.class, ShowId.class, ShowTag.class, ShowCharge.class, ShowStatus.class})
   @JsonView(ShowScooterSummary.class)
+  @Id
+  @GeneratedValue
   private int id;
   @JsonView(ShowScooterSummary.class)
   private String tag;
   @JsonView(ShowScooterSummary.class)
+  @Enumerated(EnumType.STRING)
   private StatusScooter status;
   @JsonView(ShowScooterSummary.class)
   private int chargeBattery;
-
+  @JsonIgnore
   public static int uniqueId = 30000;
+
   private String gpsLocation;
   private double mileage;
 
-//  private _batteryCharge: number;
-//  private _getMileage: number;
-
-  StatusScooter[] statusArray = StatusScooter.values();
+  @OneToMany(mappedBy = "scooter")
+  private List<Trip> trips;
+  @Transient
   Random random = new Random();
-
   public Scooter() {
     int randomIndex = random.nextInt(3);
     GeoLocation geoLocation = randomGeo(52.377956, 4.897070);
-    this.id = uniqueId++;
-    this.status = statusArray[randomIndex];
+//      this.id = uniqueId++;
+    this.status = StatusScooter.values()[randomIndex];
     this.tag = generateRandomTag(8, randomString);
     this.gpsLocation = geoLocation.lat + ", " + geoLocation.lon;
     this.chargeBattery = 0;
     this.mileage = geoLocation.distance;
     this.chargeBattery = generateRandomCharge();
+    this.trips= new ArrayList<>();
   }
 
   public Scooter(String tag) {
@@ -54,6 +65,7 @@ public class Scooter {
 
   /**
    * Generate random GeoLocation
+   *
    * @param latitude
    * @param longitude
    * @return
@@ -72,15 +84,16 @@ public class Scooter {
     double x = w * Math.cos(t);
     double y = w * Math.sin(t);
 
-    double newLatitude = y + y0;
-    double newLongitude = x + x0;
+    double newLatitude = y + y0+u;
+    double newLongitude = x + x0+v;
     double newDistance = distance(latitude, newLatitude, longitude, newLongitude, "K");
     return new GeoLocation(newLatitude, newLongitude, newDistance);
   }
 
 
   /**
-   * Calcualte the distance between two distances
+   * Calculate the distance between two distances
+   *
    * @param lat1
    * @param lon1
    * @param lat2
@@ -102,13 +115,14 @@ public class Scooter {
       } else if (unit.equals("N")) {
         dist = dist * 0.8684;
       }
-      int random = (int)(Math.random() * 1000);
+      int random = (int) (Math.random() * 1000);
       return (double) (Math.round(dist * 100) / 100) + random;
     }
   }
 
   /**
    * To generate random tag
+   *
    * @param lengthOfCode
    * @param possible
    * @return
@@ -119,6 +133,25 @@ public class Scooter {
       text.append(possible.charAt((int) Math.floor(Math.random() * possible.length())));
     }
     return text.toString();
+  }
+
+  public Trip startNewTrip(LocalDateTime startDateTime){
+    Trip trip = new Trip();
+    if (this.status.equals(StatusScooter.IDLE)){
+      trip.setStart(startDateTime);
+      trip.setStartPosition(this.gpsLocation);
+      String[] gpsLocation = this.gpsLocation.split(",");
+      GeoLocation randomGeo = randomGeo(Double.parseDouble(gpsLocation[0]),Double.parseDouble(gpsLocation[1]));
+      trip.setEndPosition(randomGeo.lat + ", " +randomGeo.lon);
+      this.status = StatusScooter.IN_USE;
+
+      return trip;
+    }
+    return null;
+  }
+
+  public void addTrip(Trip trip){
+    this.trips.add(trip);
   }
 
   public int getId() {
@@ -149,8 +182,44 @@ public class Scooter {
     this.id = id;
   }
 
+  public void setTag(String tag) {
+    this.tag = tag;
+  }
+
+  public void setStatus(StatusScooter status) {
+    this.status = status;
+  }
+
+  public void setChargeBattery(int chargeBattery) {
+    this.chargeBattery = chargeBattery;
+  }
+
+  public static void setUniqueId(int uniqueId) {
+    Scooter.uniqueId = uniqueId;
+  }
+
+  public void setGpsLocation(String gpsLocation) {
+    this.gpsLocation = gpsLocation;
+  }
+
+  public void setMileage(double mileage) {
+    this.mileage = mileage;
+  }
+
+  public void setTrips(List<Trip> trips) {
+    this.trips = trips;
+  }
+
+  public void setRandom(Random random) {
+    this.random = random;
+  }
+
+  public List<Trip> getTrips() {
+    return trips;
+  }
+
   /**
-   * GeoLocation class to be hold the random latitude and the longitude with the calculated distance
+   * GeoLocation class to hold the random latitude and the longitude with the calculated distance
    * Between these coordinates and Amsterdam location
    */
   static class GeoLocation {
@@ -175,9 +244,12 @@ public class Scooter {
     public double getDistance() {
       return distance;
     }
+
   }
 
-  enum StatusScooter {
+
+
+   public enum StatusScooter {
     IDLE,
     IN_USE,
     MAINTENANCE

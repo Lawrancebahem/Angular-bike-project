@@ -1,6 +1,7 @@
 package app.service;
 
-import app.repositories.ScooterRepository;
+import app.models.Scooter;
+import app.repositories.EntityRepository;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,9 +22,8 @@ public class ConfigureAbleFactoryBean implements WebMvcConfigurer{
   private String scooterRepository;
 
   @Bean("scooterRepository")
-  public ScooterRepository getScooterRepository(){
-    return (ScooterRepository) beanFactory.getBean(scooterRepository);
-
+  public EntityRepository<Scooter> getScooterRepository(){
+    return (EntityRepository<Scooter>) beanFactory.getBean(scooterRepository);
   }
 
   @Override
