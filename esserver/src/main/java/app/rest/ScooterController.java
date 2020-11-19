@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.swing.plaf.IconUIResource;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -57,6 +58,7 @@ public class ScooterController {
 
   @PostMapping
   public ResponseEntity<Scooter> addScooter(@RequestBody Scooter scooter) {
+//    scooter.setId(Scooter.uniqueId++);
     Scooter savedScooter = this.scooterRepository.save(scooter);
     URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("scooter/{id}").buildAndExpand(savedScooter).toUri();
     return ResponseEntity.created(location).body(savedScooter);
