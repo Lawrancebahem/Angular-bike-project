@@ -1,16 +1,14 @@
 package app.repositories;
 
 
-import app.Exception.ResourceNotFound;
 import app.models.Scooter;
 import org.springframework.stereotype.Service;
 
-import javax.security.sasl.SaslClient;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service("scooterRepositoryMock")
-public class ScooterRepositoryMock implements ScooterRepository {
+public class ScooterRepositoryMock implements EntityRepository<Scooter> {
 
   private final List<Scooter> scooterList = new ArrayList<>();
 

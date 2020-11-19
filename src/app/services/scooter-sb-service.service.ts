@@ -55,7 +55,7 @@ export class ScooterSbServiceService {
    */
   private restGetScooters(): Observable<Scooter[]> {
     let observable = this.httpClient.get<Scooter[]>(this.URL).pipe(shareReplay(1));
-    observable.subscribe((scooters)=>{
+    observable.subscribe((scooters) => {
       this.scooters = scooters ? scooters.map((scooter) => Scooter.trueCopy(scooter)):[];
     },error => {
       console.log(error);
