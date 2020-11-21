@@ -5,6 +5,7 @@ import app.Exception.ResourceNotFound;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -56,5 +57,14 @@ public abstract class AbstractEntityRepositoryJpa <E extends  Identifiable> impl
       return true;
     }
     throw new ResourceNotFound("The given id does not exist");
+  }
+
+  @Override
+  public List<E> findByQuery(String jpqlName, Object ... params) {
+    Query query = em.createNamedQuery(jpqlName);
+    if (params.length > 0){
+      query.setParameter(1, params[0]);
+    }
+    return query.getResultList();
   }
 }

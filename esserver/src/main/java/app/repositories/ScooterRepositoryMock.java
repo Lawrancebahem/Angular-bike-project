@@ -54,4 +54,9 @@ public class ScooterRepositoryMock implements EntityRepository<Scooter> {
   public boolean deleteById(int id){
     return this.scooterList.removeIf(scooter -> scooter.getId() == id);
   }
+
+  @Override
+  public List<Scooter> findByQuery(String jpqlName, Object... params) {
+    return null;
+  }
 }

@@ -1,8 +1,11 @@
 package app.models;
 
 import app.repositories.Identifiable;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,20 +15,31 @@ import java.util.Random;
 
 
 @Entity
+
+@NamedQueries({
+
+  @NamedQuery(
+    name = "Scooter_find_by_status",
+    query = "SELECT s FROM Scooter s WHERE s.status = ? 1"
+  ),
+
+  @NamedQuery(
+    name = "Scooter_find_by_battery",
+    query = "SELECT s FROM Scooter s WHERE s.chargeBattery < ? 1"
+  )
+})
+
 public class Scooter implements Identifiable {
   @Transient
   private final String randomString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
   //  @JsonView({ShowScooterSummary.class, ShowId.class, ShowTag.class, ShowCharge.class, ShowStatus.class})
-  @JsonView(ShowScooterSummary.class)
   @Id
   @GeneratedValue
   private int id;
-  @JsonView(ShowScooterSummary.class)
   private String tag;
-  @JsonView(ShowScooterSummary.class)
-  @Enumerated(EnumType.STRING)
+//  @Enumerated(EnumType.STRING)
+  @Enumerated(EnumType.ORDINAL)
   private StatusScooter status;
-  @JsonView(ShowScooterSummary.class)
   private int chargeBattery;
   @JsonIgnore
   public static int uniqueId = 30000;
@@ -33,8 +47,15 @@ public class Scooter implements Identifiable {
   private String gpsLocation;
   private double mileage;
 
+//  @JsonSerialize(using = CustomJson.ShallowSerializer.class)
+  @JsonIgnoreProperties("scooter")
   @OneToMany(mappedBy = "scooter")
   private List<Trip> trips;
+
+  @JsonIgnoreProperties("scooter")
+  @OneToOne(mappedBy = "scooter")
+  private Trip currentTrip;
+
   @Transient
   Random random = new Random();
   public Scooter() {
@@ -93,7 +114,6 @@ public class Scooter implements Identifiable {
 
   /**
    * Calculate the distance between two distances
-   *
    * @param lat1
    * @param lon1
    * @param lat2
@@ -151,6 +171,7 @@ public class Scooter implements Identifiable {
   }
 
   public void addTrip(Trip trip){
+    this.setCurrentTrip(trip);
     this.trips.add(trip);
   }
 
@@ -223,8 +244,13 @@ public class Scooter implements Identifiable {
     return trips;
   }
 
+  public Trip getCurrentTrip() {
+    return currentTrip;
+  }
 
-
+  public void setCurrentTrip(Trip currentTrip) {
+    this.currentTrip = currentTrip;
+  }
 
   /**
    * GeoLocation class to hold the random latitude and the longitude with the calculated distance
@@ -266,5 +292,7 @@ public class Scooter implements Identifiable {
 
   public class ShowScooterSummary {
   }
+  public class ShowScooterWithTrip{
 
+  }
 }

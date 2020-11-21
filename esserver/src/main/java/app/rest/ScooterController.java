@@ -3,24 +3,27 @@ package app.rest;
 
 import app.Exception.PreConditionalFailed;
 import app.Exception.ResourceNotFound;
+import app.models.CustomJson;
 import app.models.Scooter;
 import app.models.Trip;
 import app.repositories.EntityRepository;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.swing.plaf.IconUIResource;
 import java.net.URI;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/scooters")
+  @RequestMapping("/scooters")
 public class ScooterController {
 
   @Autowired
@@ -31,8 +34,21 @@ public class ScooterController {
   @Qualifier("tripsRepositoryJpa")
   private EntityRepository<Trip> tripEntityRepository;
 
+
   @GetMapping
-  public List<Scooter> getScooters() {
+  public List<Scooter> getScooters(@RequestParam(required = false)Integer battery,
+                                   @RequestParam(required = false) String status,
+                                   WebRequest webRequest) {
+
+    if (webRequest.getParameterMap().size() > 1) throw new PreConditionalFailed("There are too many parameters, provide just one!");
+    if (status != null){
+      if (Arrays.stream(Scooter.StatusScooter.values()).noneMatch(statusScooter -> statusScooter.name().equalsIgnoreCase(status))){
+        throw new PreConditionalFailed("The given status does not exit, please provide one of the following statuses(IDLE, INUSE, MAINTENANCE)");
+      }
+      return this.scooterRepository.findByQuery("Scooter_find_by_status", Scooter.StatusScooter.valueOf(status));
+    }else if (battery != null){
+      return this.scooterRepository.findByQuery("Scooter_find_by_battery", battery);
+    }
     return this.scooterRepository.findAll();
   }
 
@@ -118,5 +134,16 @@ public class ScooterController {
     } else {
       throw new PreConditionalFailed("The scooter does not have status 'IDLE");
     }
+  }
+
+
+  /**
+   * To retrieve the current trips of scooters
+   *
+   */
+//  @JsonView(Scooter.ShowCurrentTrip.class)
+  @GetMapping("/currenttrips")
+  public List<Trip> getCurrentTrips(){
+    return this.tripEntityRepository.findByQuery("Trip_find_current_from_scooter");
   }
 }

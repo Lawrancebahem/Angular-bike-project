@@ -2,29 +2,49 @@ package app.models;
 
 import app.repositories.Identifiable;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
 import javax.persistence.*;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Random;
 
 @Entity
+@NamedQuery(
+  name = "Trip_find_current_from_scooter",
+  query = "SELECT t FROM Trip t"
+)
 public class Trip implements Identifiable {
 
   @Id
   @GeneratedValue
   private int id;
+  @JsonSerialize(using = CustomDateSerializer.class)
   private LocalDateTime start;
+  @JsonSerialize(using = CustomDateSerializer.class)
   private LocalDateTime end;
+  @JsonSerialize(using = CustomDateSerializer.class)
   private LocalDateTime time;
   private String startPosition;
   private String endPosition;
   private double mileage;
   private double cost;
-  @JsonBackReference
+
+  @JsonIgnoreProperties("trips")
   @ManyToOne
   private Scooter scooter;
+
 
   @Transient
   private static Random random = new Random();
@@ -125,6 +145,33 @@ public class Trip implements Identifiable {
       LocalTime.of(random.nextInt(24), random.nextInt(60),
         random.nextInt(60), random.nextInt(999999999 + 1)));
     return time;
+  }
+
+  public static class ShowInfo {
+
+  }
+
+  /**
+   * To format the local date time in an appropriate format
+   */
+  static class CustomDateSerializer extends StdSerializer<LocalDateTime> {
+    private static final long serialVersionUID = 1L;
+//    private static SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+
+    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    protected CustomDateSerializer() {
+      this(null);
+    }
+
+    public CustomDateSerializer(Class<LocalDateTime> t) {
+      super(t);
+    }
+
+    @Override
+    public void serialize(LocalDateTime value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+      gen.writeString(formatter.format(value));
+    }
   }
 }
 
