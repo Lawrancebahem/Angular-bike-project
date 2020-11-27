@@ -60,11 +60,11 @@ public abstract class AbstractEntityRepositoryJpa <E extends  Identifiable> impl
   }
 
   @Override
-  public List<E> findByQuery(String jpqlName, Object ... params) {
-    Query query = em.createNamedQuery(jpqlName);
-    if (params.length > 0){
-      query.setParameter(1, params[0]);
-    }
-    return query.getResultList();
+    public List<E> findByQuery(String jpqlName, Object ... params) {
+      Query query = em.createNamedQuery(jpqlName);
+      if (params.length > 0){
+        query.setParameter(1, params[0]);
+      }
+      return query.getResultList();
   }
 }
