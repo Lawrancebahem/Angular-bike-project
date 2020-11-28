@@ -29,15 +29,15 @@ public class AuthenticateController {
     String userName = email.split("@")[0];
     String password = signInfo.get("password").asText();
 
-    if (userName.equalsIgnoreCase(password)){
-      User loggedInUser = new User(userName,email,false);
+    if (userName.equalsIgnoreCase(password)) {
+      User loggedInUser = new User(userName, email, false);
 
       JWToken jwToken = new JWToken(loggedInUser.getName(), loggedInUser.getId(), loggedInUser.isAdmin());
       String tokenString = jwToken.encode(this.apiConfig.getIssuer(), this.apiConfig.getPassPhrase(),
         this.apiConfig.getTokenDurationOfValidity());
 
       return ResponseEntity.accepted().header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenString).body(loggedInUser);
-    }else {
+    } else {
       throw new UnAuthorizedException("Cannot authenticate user by email " + email + " and password #" + password.length());
     }
   }

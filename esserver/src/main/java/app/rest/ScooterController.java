@@ -3,10 +3,12 @@ package app.rest;
 
 import app.Exception.PreConditionalFailed;
 import app.Exception.ResourceNotFound;
+import app.Exception.UnAuthorizedException;
 import app.models.CustomJson;
 import app.models.Scooter;
 import app.models.Trip;
 import app.repositories.EntityRepository;
+import app.utilities.JWToken;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.swing.*;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -35,11 +38,14 @@ public class ScooterController {
   private EntityRepository<Trip> tripEntityRepository;
 
 
-  @GetMapping
+  @GetMapping(path = "", produces = "application/json")
   public List<Scooter> getScooters(@RequestParam(required = false)Integer battery,
                                    @RequestParam(required = false) String status,
+//                                   @RequestAttribute(name = JWToken.JWT_ATTRIBUTE_NAME, required = true) JWToken jwToken,
                                    WebRequest webRequest) {
-
+//    if (!jwToken.getUsername().equalsIgnoreCase("Nico")){
+//      throw new UnAuthorizedException("You're not mister Nico to see the scooters");
+//    }
     if (webRequest.getParameterMap().size() > 1) throw new PreConditionalFailed("There are too many parameters, provide just one!");
     if (status != null){
       if (Arrays.stream(Scooter.StatusScooter.values()).noneMatch(statusScooter -> statusScooter.name().equalsIgnoreCase(status))){
@@ -125,11 +131,9 @@ public class ScooterController {
       trip.setScooter(foundScooter);
       tripEntityRepository.save(trip);
 
-
       Scooter savedScooter = this.scooterRepository.save(foundScooter);
       URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/scooter/{id}").buildAndExpand(savedScooter).toUri();
       return ResponseEntity.created(location).body(savedScooter);
-
 
     } else {
       throw new PreConditionalFailed("The scooter does not have status 'IDLE");
