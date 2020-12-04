@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 @Component
 @WebFilter
@@ -30,12 +31,12 @@ public class JWTRequestFilter extends OncePerRequestFilter {
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
 
     String servletPath = request.getServletPath();
-
     //Options requests and non-secured area should pass through without check
-    if (HttpMethod.OPTIONS.matches(request.getMethod()) || SECURED_PATHS.stream().noneMatch(servletPath::equalsIgnoreCase)){
+    if ((HttpMethod.OPTIONS.matches(request.getMethod())  || SECURED_PATHS.stream().noneMatch(servletPath::equalsIgnoreCase))&& !servletPath.matches("/scooters/(\\d)")    ){
       chain.doFilter(request, response);
       return;
     }
+
     JWToken jwToken = null;
 
     //get the encrypted token string from the authorization request header

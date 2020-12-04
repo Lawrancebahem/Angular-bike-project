@@ -13,10 +13,12 @@ import {Detail4qpComponent} from './components/scooters/detail4qp/detail4qp.comp
 import {Overview4qpComponent} from './components/scooters/overview4qp/overview4qp.component';
 import {Overview5Component} from './components/scooters/overview5/overview5.component';
 import {Detail5Component} from './components/scooters/detail5/detail5.component';
+import {LoginComponent} from "./components/mainpage/login/login.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch: 'full'},
   {path: 'home', component: HomeComponent},
+  {path: 'login', component: LoginComponent},
   {path: 'overview1', component: Overview1componentComponent},
   {path: 'overview2', component: Overview2componentComponent},
   {path: 'overview3', component: Overview3Component},

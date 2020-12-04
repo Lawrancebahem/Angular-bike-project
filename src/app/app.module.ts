@@ -22,7 +22,11 @@ import { Overview4qpComponent } from './components/scooters/overview4qp/overview
 import {Detail4qpComponent} from './components/scooters/detail4qp/detail4qp.component';
 import { Overview5Component } from './components/scooters/overview5/overview5.component';
 import { Detail5Component } from './components/scooters/detail5/detail5.component';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
+import { HeaderSbComponent } from './components/mainpage/header-sb/header-sb.component';
+import { LoginComponent } from './components/mainpage/login/login.component';
+import { NavBarSbComponent } from './components/mainpage/nav-bar-sb/nav-bar-sb.component';
+import {AuthInterceptorService} from "./services/auth-interceptor.service";
 
 
 
@@ -45,9 +49,13 @@ import {HttpClientModule} from '@angular/common/http';
     Overview4qpComponent,
     Detail4qpComponent,
     Overview5Component,
-    Detail5Component
+    Detail5Component,
+    HeaderSbComponent,
+    LoginComponent,
+    NavBarSbComponent
     // AutoFocusDirective
   ],
+
   imports: [
     BrowserModule,
     FormsModule,
@@ -55,7 +63,14 @@ import {HttpClientModule} from '@angular/common/http';
     NoopAnimationsModule,
     HttpClientModule
   ],
-  providers: [ScootersService ,PendingChangesGuard],
+  providers: [ScootersService ,
+    PendingChangesGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptorService,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

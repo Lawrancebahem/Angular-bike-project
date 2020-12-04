@@ -37,6 +37,9 @@ export class Detail5Component implements OnInit{
     this.paramsSubscription = this.activeRouter.params.subscribe((params: Params) => {
       this.hasChanged = false;
       this.selectedScooterId = Number(params['id']);
+      if (this.selectedScooterId > -1){
+        this.getScooterById();
+      }
     });
   }
 
@@ -60,9 +63,12 @@ export class Detail5Component implements OnInit{
   /**
    * Get a scooter by its id
    */
-  public getScooterById(): Scooter {
-    const scooter = this.editedScooter = this.scooterSbServiceService.findById(this.selectedScooterId);
-    return scooter;
+  public getScooterById(){
+    this.scooterSbServiceService.findById(this.selectedScooterId).subscribe((scooter)=>{
+      this.editedScooter = scooter;
+    },error => {
+      console.log(error.error.message)
+    })
   }
 
   /**

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/authenticate")
 public class AuthenticateController {
@@ -23,8 +22,8 @@ public class AuthenticateController {
   @Autowired
   ConfigureAbleFactoryBean apiConfig;
 
-  @PostMapping(value = "/login", produces = "application/json")
-  public ResponseEntity<User> authenticate(@RequestBody ObjectNode signInfo, HttpServletRequest request) {
+  @PostMapping(value = "/login" ,produces = "application/json")
+  public ResponseEntity<User> authenticate(@RequestBody ObjectNode signInfo) {
     String email = signInfo.get("email").asText();
     String userName = email.split("@")[0];
     String password = signInfo.get("password").asText();
@@ -35,7 +34,6 @@ public class AuthenticateController {
       JWToken jwToken = new JWToken(loggedInUser.getName(), loggedInUser.getId(), loggedInUser.isAdmin());
       String tokenString = jwToken.encode(this.apiConfig.getIssuer(), this.apiConfig.getPassPhrase(),
         this.apiConfig.getTokenDurationOfValidity());
-
       return ResponseEntity.accepted().header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenString).body(loggedInUser);
     } else {
       throw new UnAuthorizedException("Cannot authenticate user by email " + email + " and password #" + password.length());
