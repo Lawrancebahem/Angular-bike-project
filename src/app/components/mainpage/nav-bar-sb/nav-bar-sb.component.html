@@ -1,0 +1,27 @@
+<nav>
+  <ul>
+    <li routerLink="/"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{exact:true}">
+      Home
+    </li>
+    <li>Scooter
+      <!-- Sub menu -->
+      <ul class="menu--sub">
+        <li routerLink="overview1" routerLinkActive="active">Overview 1</li>
+        <li routerLink="overview2" routerLinkActive="active">Overview 2</li>
+        <li routerLink="overview3" routerLinkActive="active">Overview 3</li>
+        <li routerLink="overview4" routerLinkActive="active">Overview 4</li>
+        <li routerLink="overview41" routerLinkActive="active">overview41</li>
+        <li routerLink="overview4qp" routerLinkActive="active">overview4qp</li>
+        <li routerLink="overview5" routerLinkActive="active">overview5</li>
+      </ul>
+    </li>
+    <li>My trips</li>
+  </ul>
+  <ul>
+    <li *ngIf="!sessionService.isAuthenticated()" routerLink="signup">Sign up</li>
+    <li *ngIf="!sessionService.isAuthenticated()" routerLink="login">Login</li>
+    <li (click)="signOff()" *ngIf="sessionService.isAuthenticated()" routerLink="login">Log out</li>
+  </ul>
+</nav>

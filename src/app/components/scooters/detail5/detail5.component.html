@@ -1,4 +1,4 @@
-<div *ngIf="getScooterById() != null else noScooter" class="col">
+  <div *ngIf="editedScooter!= null else noScooter" class="col">
   <h3>Update scooter {{editedScooter.tag}} ({{-editedScooter.id}} | )</h3>
 
   <label>Tag</label>

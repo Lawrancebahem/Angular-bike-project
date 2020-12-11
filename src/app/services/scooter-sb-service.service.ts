@@ -11,6 +11,7 @@ export class ScooterSbServiceService {
   private URL = 'http://localhost:8080/scooters';
   scooters: Scooter[];
   public selectedScooter = -1;
+  private scooter:Scooter;
 
 
   constructor(private httpClient: HttpClient) {
@@ -20,7 +21,7 @@ export class ScooterSbServiceService {
 
   // TO-DO: Return previous scooter else null
   save(scooter: Scooter): Observable<Scooter> {
-    let foundScooter = this.findById(scooter.id);
+    let foundScooter = this.scooters.find(scooter => scooter.id = scooter.id);
     if (foundScooter != null) {
       this.scooters.splice(this.scooters.indexOf(foundScooter), 1, scooter);
       return this.resPutScooter(scooter);
@@ -34,13 +35,16 @@ export class ScooterSbServiceService {
     return this.scooters;
   }
 
-  findById(scooterId): Scooter {
-    return this.scooters.find(scooter => scooter.id === scooterId);
+  findById(scooterId): Observable<Scooter> {
+    let observable = this.httpClient.get<Scooter>(this.URL + "/" +scooterId).pipe(shareReplay(1));
+    return observable;
+    // return this.scooters.find(scooter => scooter.id === scooterId);
   }
 
 
+
   deleteById(id) {
-    let foundScooter = this.findById(id);
+    let foundScooter = this.scooters.find(scooter => scooter.id = id);
     if (foundScooter != null) {
       this.scooters.splice(this.scooters.indexOf(foundScooter), 1);
       this.resDeleteScooter(id);

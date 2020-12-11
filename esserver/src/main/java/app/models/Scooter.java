@@ -8,8 +8,10 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -92,7 +94,7 @@ public class Scooter implements Identifiable {
    * @return
    */
   private GeoLocation randomGeo(double latitude, double longitude) {
-
+    LocalDate localDate =  LocalDate.now();
     double y0 = latitude;
     double x0 = longitude;
     long rd = 5000 / 111300; // about 111300 meters in one degree

@@ -3,10 +3,12 @@ package app.rest;
 
 import app.Exception.PreConditionalFailed;
 import app.Exception.ResourceNotFound;
+import app.Exception.UnAuthorizedException;
 import app.models.CustomJson;
 import app.models.Scooter;
 import app.models.Trip;
 import app.repositories.EntityRepository;
+import app.utilities.JWToken;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +18,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.swing.*;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:4200")
 @RestController
-  @RequestMapping("/scooters")
+@RequestMapping("/scooters")
 public class ScooterController {
 
   @Autowired
@@ -35,11 +37,14 @@ public class ScooterController {
   private EntityRepository<Trip> tripEntityRepository;
 
 
-  @GetMapping
-  public List<Scooter> getScooters(@RequestParam(required = false) Integer battery,
+  @GetMapping(path = "", produces = "application/json")
+  public List<Scooter> getScooters(@RequestParam(required = false)Integer battery,
                                    @RequestParam(required = false) String status,
+//                                   @RequestAttribute(name = JWToken.JWT_ATTRIBUTE_NAME, required = true) JWToken jwToken,
                                    WebRequest webRequest) {
-
+//    if (!jwToken.getUsername().equalsIgnoreCase("Nico")){
+//      throw new UnAuthorizedException("You're not mister Nico to see the scooters");
+//    }
     if (webRequest.getParameterMap().size() > 1) throw new PreConditionalFailed("There are too many parameters, provide just one!");
     if (status != null){
       if (Arrays.stream(Scooter.StatusScooter.values()).noneMatch(statusScooter -> statusScooter.name().equalsIgnoreCase(status))){
@@ -64,6 +69,7 @@ public class ScooterController {
     return this.scooterRepository.findAll();
   }
 
+
   @GetMapping("/{id}")
   public Scooter findScooterById(@PathVariable int id) {
     Scooter foundScooter = scooterRepository.findById(id);
@@ -81,7 +87,6 @@ public class ScooterController {
 
   @RequestMapping(value = "/{id}", method = {RequestMethod.PUT, RequestMethod.POST})
   public ResponseEntity<Scooter> saveOrUpdateScooter(@PathVariable int id, @RequestBody Scooter scooter) {
-    System.out.println(scooter);
     System.out.println("The parm id " + id + " and the scooter id " + scooter.getId());
     if (id != scooter.getId()) throw new PreConditionalFailed("The id does not match the given id in the body");
     Scooter savedScooter = this.scooterRepository.save(scooter);
@@ -125,11 +130,9 @@ public class ScooterController {
       trip.setScooter(foundScooter);
       tripEntityRepository.save(trip);
 
-
       Scooter savedScooter = this.scooterRepository.save(foundScooter);
       URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/scooter/{id}").buildAndExpand(savedScooter).toUri();
       return ResponseEntity.created(location).body(savedScooter);
-
 
     } else {
       throw new PreConditionalFailed("The scooter does not have status 'IDLE");
@@ -138,8 +141,8 @@ public class ScooterController {
 
 
   /**
-   * Return list of all trips from 'IN_USE' scooters
-   * @return List of trips
+   * To retrieve the current trips of scooters
+   *
    */
 //  @JsonView(Scooter.ShowCurrentTrip.class)
   @GetMapping("/currenttrips")
