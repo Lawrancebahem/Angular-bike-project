@@ -295,4 +295,20 @@ public class Scooter implements Identifiable {
   public class ShowScooterWithTrip{
 
   }
+
+  @Override
+  public String toString() {
+    return "Scooter{" +
+      "randomString='" + randomString + '\'' +
+      ", id=" + id +
+      ", tag='" + tag + '\'' +
+      ", status=" + status +
+      ", chargeBattery=" + chargeBattery +
+      ", gpsLocation='" + gpsLocation + '\'' +
+      ", mileage=" + mileage +
+      ", trips=" + trips +
+      ", currentTrip=" + currentTrip +
+      ", random=" + random +
+      '}';
+  }
 }

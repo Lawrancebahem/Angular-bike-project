@@ -21,10 +21,14 @@ import java.util.Date;
 import java.util.Random;
 
 @Entity
-@NamedQuery(
-  name = "Trip_find_current_from_scooter",
-  query = "SELECT t FROM Trip t"
-)
+
+@NamedQueries({
+  @NamedQuery(
+    name = "Trip_find_current_from_scooter",
+    query = "SELECT t FROM Trip t"
+  )
+})
+
 public class Trip implements Identifiable {
 
   @Id

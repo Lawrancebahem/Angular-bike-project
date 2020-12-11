@@ -36,7 +36,7 @@ public class ScooterController {
 
 
   @GetMapping
-  public List<Scooter> getScooters(@RequestParam(required = false)Integer battery,
+  public List<Scooter> getScooters(@RequestParam(required = false) Integer battery,
                                    @RequestParam(required = false) String status,
                                    WebRequest webRequest) {
 
@@ -64,7 +64,6 @@ public class ScooterController {
     return this.scooterRepository.findAll();
   }
 
-
   @GetMapping("/{id}")
   public Scooter findScooterById(@PathVariable int id) {
     Scooter foundScooter = scooterRepository.findById(id);
@@ -82,6 +81,7 @@ public class ScooterController {
 
   @RequestMapping(value = "/{id}", method = {RequestMethod.PUT, RequestMethod.POST})
   public ResponseEntity<Scooter> saveOrUpdateScooter(@PathVariable int id, @RequestBody Scooter scooter) {
+    System.out.println(scooter);
     System.out.println("The parm id " + id + " and the scooter id " + scooter.getId());
     if (id != scooter.getId()) throw new PreConditionalFailed("The id does not match the given id in the body");
     Scooter savedScooter = this.scooterRepository.save(scooter);
@@ -138,8 +138,8 @@ public class ScooterController {
 
 
   /**
-   * To retrieve the current trips of scooters
-   *
+   * Return list of all trips from 'IN_USE' scooters
+   * @return List of trips
    */
 //  @JsonView(Scooter.ShowCurrentTrip.class)
   @GetMapping("/currenttrips")

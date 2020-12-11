@@ -2,6 +2,8 @@ package app.repositories;
 
 
 import app.Exception.ResourceNotFound;
+import app.models.Scooter;
+import app.models.Trip;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -11,6 +13,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Set;
 
 
 @Transactional
@@ -43,14 +46,22 @@ public abstract class AbstractEntityRepositoryJpa <E extends  Identifiable> impl
   public E save(E e) {
     E foundInstance = findById(e.getId());
     if (foundInstance != null) {
-      foundInstance = this.em.merge(foundInstance);
+      // Add trips to detached entity, if any
+      if(foundInstance instanceof Scooter){
+        List<Trip> tripList = ((Scooter) foundInstance).getTrips();
+        for(Trip trip : tripList){
+          ((Scooter) e).addTrip(trip);
+        }
+      }
+      foundInstance = this.em.merge(e);
       return foundInstance;
     }
     this.em.persist(e);
-    return e;  }
+    return e;
+  }
 
   @Override
-  public boolean deleteById(int id) {
+  public boolean deleteById(int id) throws ResourceNotFound {
     E foundInstance = findById(id);
     if (foundInstance != null) {
       this.em.remove(foundInstance);
