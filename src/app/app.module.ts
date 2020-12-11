@@ -27,6 +27,7 @@ import { HeaderSbComponent } from './components/mainpage/header-sb/header-sb.com
 import { LoginComponent } from './components/mainpage/login/login.component';
 import { NavBarSbComponent } from './components/mainpage/nav-bar-sb/nav-bar-sb.component';
 import {AuthInterceptorService} from "./services/auth-interceptor.service";
+import { Overview51Component } from './components/scooters/overview51/overview51.component';
 
 
 
@@ -52,7 +53,8 @@ import {AuthInterceptorService} from "./services/auth-interceptor.service";
     Detail5Component,
     HeaderSbComponent,
     LoginComponent,
-    NavBarSbComponent
+    NavBarSbComponent,
+    Overview51Component
     // AutoFocusDirective
   ],
 

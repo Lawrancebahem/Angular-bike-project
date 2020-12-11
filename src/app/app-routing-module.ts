@@ -14,6 +14,7 @@ import {Overview4qpComponent} from './components/scooters/overview4qp/overview4q
 import {Overview5Component} from './components/scooters/overview5/overview5.component';
 import {Detail5Component} from './components/scooters/detail5/detail5.component';
 import {LoginComponent} from "./components/mainpage/login/login.component";
+import {Overview51Component} from "./components/scooters/overview51/overview51.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -45,6 +46,12 @@ const routes: Routes = [
     ]
   },
   {path: 'overview5', component: Overview5Component,
+    children: [
+      {path: ':id', component: Detail5Component},
+      {path: '',redirectTo: '-1', pathMatch: 'full'},
+    ]
+  },
+  {path: 'overview51', component: Overview51Component,
     children: [
       {path: ':id', component: Detail5Component},
       {path: '',redirectTo: '-1', pathMatch: 'full'},
