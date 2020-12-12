@@ -12,6 +12,7 @@ export class AuthInterceptorService implements HttpInterceptor{
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let token = this.session.getTokenFromSessionStorage();
+    console.log("Stored token : " + token)
     if (token != null){
       const modifiedRequest = req.clone({setHeaders:{Authorization:token}});
       console.log(modifiedRequest);

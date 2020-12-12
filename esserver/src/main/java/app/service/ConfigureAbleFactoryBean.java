@@ -2,6 +2,7 @@ package app.service;
 
 import app.models.Scooter;
 import app.repositories.EntityRepository;
+import app.utilities.JWToken;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +12,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Configuration
 @EnableWebMvc
@@ -52,6 +55,7 @@ public class ConfigureAbleFactoryBean implements WebMvcConfigurer{
   public int getTokenDurationOfValidity() {
     return tokenDurationOfValidity;
   }
+
 
   @Override
   public void addCorsMappings(CorsRegistry registry) {

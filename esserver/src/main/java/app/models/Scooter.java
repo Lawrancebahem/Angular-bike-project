@@ -1,23 +1,18 @@
 package app.models;
 
 import app.repositories.Identifiable;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonView;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
 
 @Entity
-
 @NamedQueries({
 
   @NamedQuery(
@@ -35,11 +30,13 @@ public class Scooter implements Identifiable {
   @Transient
   private final String randomString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
   //  @JsonView({ShowScooterSummary.class, ShowId.class, ShowTag.class, ShowCharge.class, ShowStatus.class})
+
   @Id
   @GeneratedValue
   private int id;
+//  @JsonView({Scooter.ScooterSummary.class, ScooterWithTrips.class})
   private String tag;
-//  @Enumerated(EnumType.STRING)
+  //  @Enumerated(EnumType.STRING)
   @Enumerated(EnumType.ORDINAL)
   private StatusScooter status;
   private int chargeBattery;
@@ -49,17 +46,17 @@ public class Scooter implements Identifiable {
   private String gpsLocation;
   private double mileage;
 
-//  @JsonSerialize(using = CustomJson.ShallowSerializer.class)
+  //  @JsonSerialize(using = CustomJson.ShallowSerializer.class)
   @JsonIgnoreProperties("scooter")
   @OneToMany(mappedBy = "scooter")
   private List<Trip> trips;
-
   @JsonIgnoreProperties("scooter")
   @OneToOne(mappedBy = "scooter")
   private Trip currentTrip;
 
   @Transient
   Random random = new Random();
+
   public Scooter() {
     int randomIndex = random.nextInt(3);
     GeoLocation geoLocation = randomGeo(52.377956, 4.897070);
@@ -70,7 +67,7 @@ public class Scooter implements Identifiable {
     this.chargeBattery = 0;
     this.mileage = geoLocation.distance;
     this.chargeBattery = generateRandomCharge();
-    this.trips= new ArrayList<>();
+    this.trips = new ArrayList<>();
   }
 
   public Scooter(String tag) {
@@ -94,7 +91,7 @@ public class Scooter implements Identifiable {
    * @return
    */
   private GeoLocation randomGeo(double latitude, double longitude) {
-    LocalDate localDate =  LocalDate.now();
+    LocalDate localDate = LocalDate.now();
     double y0 = latitude;
     double x0 = longitude;
     long rd = 5000 / 111300; // about 111300 meters in one degree
@@ -107,8 +104,8 @@ public class Scooter implements Identifiable {
     double x = w * Math.cos(t);
     double y = w * Math.sin(t);
 
-    double newLatitude = y + y0+u;
-    double newLongitude = x + x0+v;
+    double newLatitude = y + y0 + u;
+    double newLongitude = x + x0 + v;
     double newDistance = distance(latitude, newLatitude, longitude, newLongitude, "K");
     return new GeoLocation(newLatitude, newLongitude, newDistance);
   }
@@ -116,6 +113,7 @@ public class Scooter implements Identifiable {
 
   /**
    * Calculate the distance between two distances
+   *
    * @param lat1
    * @param lon1
    * @param lat2
@@ -157,14 +155,14 @@ public class Scooter implements Identifiable {
     return text.toString();
   }
 
-  public Trip startNewTrip(LocalDateTime startDateTime){
+  public Trip startNewTrip(LocalDateTime startDateTime) {
     Trip trip = new Trip();
-    if (this.status.equals(StatusScooter.IDLE)){
+    if (this.status.equals(StatusScooter.IDLE)) {
       trip.setStart(startDateTime);
       trip.setStartPosition(this.gpsLocation);
       String[] gpsLocation = this.gpsLocation.split(",");
-      GeoLocation randomGeo = randomGeo(Double.parseDouble(gpsLocation[0]),Double.parseDouble(gpsLocation[1]));
-      trip.setEndPosition(randomGeo.lat + ", " +randomGeo.lon);
+      GeoLocation randomGeo = randomGeo(Double.parseDouble(gpsLocation[0]), Double.parseDouble(gpsLocation[1]));
+      trip.setEndPosition(randomGeo.lat + ", " + randomGeo.lon);
       this.status = StatusScooter.IN_USE;
 
       return trip;
@@ -172,11 +170,10 @@ public class Scooter implements Identifiable {
     return null;
   }
 
-  public void addTrip(Trip trip){
+  public void addTrip(Trip trip) {
     this.setCurrentTrip(trip);
     this.trips.add(trip);
   }
-
 
 
   public String getTag() {
@@ -284,9 +281,7 @@ public class Scooter implements Identifiable {
   }
 
 
-
-
-   public enum StatusScooter {
+  public enum StatusScooter {
     IDLE,
     IN_USE,
     MAINTENANCE
@@ -294,7 +289,8 @@ public class Scooter implements Identifiable {
 
   public class ShowScooterSummary {
   }
-  public class ShowScooterWithTrip{
+
+  public class ShowScooterWithTrip {
 
   }
 
@@ -312,5 +308,13 @@ public class Scooter implements Identifiable {
       ", currentTrip=" + currentTrip +
       ", random=" + random +
       '}';
+  }
+
+  static class ScooterSummary {
+
+  }
+
+  static class ScooterWithTrips {
+
   }
 }

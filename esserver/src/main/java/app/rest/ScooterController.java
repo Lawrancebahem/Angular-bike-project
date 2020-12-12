@@ -9,15 +9,20 @@ import app.models.Scooter;
 import app.models.Trip;
 import app.repositories.EntityRepository;
 import app.utilities.JWToken;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.swing.*;
 import java.net.URI;
 import java.time.LocalDateTime;
@@ -26,6 +31,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/scooters")
+@CrossOrigin(origins = "http://localhost:4200/")
 public class ScooterController {
 
   @Autowired
@@ -69,9 +75,10 @@ public class ScooterController {
     return this.scooterRepository.findAll();
   }
 
-
   @GetMapping("/{id}")
-  public Scooter findScooterById(@PathVariable int id) {
+  public Scooter findScooterById(@PathVariable int id, HttpServletRequest request) {
+    String encryptedToken = request.getHeader(HttpHeaders.AUTHORIZATION);
+    if (encryptedToken == null) return null;
     Scooter foundScooter = scooterRepository.findById(id);
     if (foundScooter == null) throw new ResourceNotFound("The id does not exist");
     return foundScooter;

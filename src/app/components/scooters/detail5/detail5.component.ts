@@ -65,6 +65,7 @@ export class Detail5Component implements OnInit{
    */
   public getScooterById(){
     this.scooterSbServiceService.findById(this.selectedScooterId).subscribe((scooter)=>{
+      console.log(scooter);
       this.editedScooter = scooter;
     },error => {
       console.log(error.error.message)
