@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
@@ -76,9 +77,10 @@ public class ScooterController {
   }
 
   @GetMapping("/{id}")
-  public Scooter findScooterById(@PathVariable int id, HttpServletRequest request) {
+  public Scooter findScooterById(@PathVariable int id, HttpServletRequest request) throws AuthenticationException {
     String encryptedToken = request.getHeader(HttpHeaders.AUTHORIZATION);
-    if (encryptedToken == null) return null;
+    System.out.println("the toke is " + encryptedToken);
+    if (encryptedToken == null) throw new AuthenticationException("You need to log in");
     Scooter foundScooter = scooterRepository.findById(id);
     if (foundScooter == null) throw new ResourceNotFound("The id does not exist");
     return foundScooter;

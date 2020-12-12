@@ -35,8 +35,8 @@ export class ScooterSbServiceService {
     return this.scooters;
   }
 
-  findById(scooterId): Observable<any> {
-    let observable = this.httpClient.get<any>(this.URL + "/" +scooterId).pipe(shareReplay(1));
+  findById(scooterId): Observable<Scooter> {
+    let observable = this.httpClient.get<Scooter>(this.URL + "/" +scooterId).pipe(shareReplay(1));
     return observable;
   }
 

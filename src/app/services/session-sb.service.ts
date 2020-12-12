@@ -50,7 +50,7 @@ export class SessionSbService {
   }
 
   public isAuthenticated(): boolean {
-    return this.currentUserName != null;
+    return this.getTokenFromSessionStorage() != null;
   }
 
   /**
@@ -83,8 +83,6 @@ export class SessionSbService {
   getTokenFromSessionStorage():string{
     let token = sessionStorage.getItem(this.BS_TOKEN_NAME);
     if (token == null) {
-      token = localStorage.getItem(this.BS_TOKEN_NAME);
-      sessionStorage.setItem(this.BS_TOKEN_NAME, token);
       return null;
     }else{
       let tokenParts = token.split("|");

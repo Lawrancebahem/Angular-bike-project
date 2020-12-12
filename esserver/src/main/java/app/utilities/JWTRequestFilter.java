@@ -32,8 +32,7 @@ public class JWTRequestFilter extends OncePerRequestFilter {
 
     String servletPath = request.getServletPath();
     //Options requests and non-secured area should pass through without check
-    if ((HttpMethod.OPTIONS.matches(request.getMethod()) || SECURED_PATHS.stream().noneMatch(servletPath::equalsIgnoreCase))
-      && !servletPath.matches("/scooters/(\\d)")){
+    if ((HttpMethod.OPTIONS.matches(request.getMethod()) || SECURED_PATHS.stream().noneMatch(servletPath::equalsIgnoreCase))){
       chain.doFilter(request, response);
       return;
     }
