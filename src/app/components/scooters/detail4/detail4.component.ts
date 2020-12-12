@@ -3,7 +3,7 @@ import {Scooter, ScooterStatus} from '../../../models/scooter';
 import {ScootersService} from '../../../services/scooters.service';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {Subscription} from 'rxjs';
-import {CanDeactivateComponent} from '../../../gurads/can-deactivate-component';
+import {CanDeactivateComponent} from '../../../guards/can-deactivate-component';
 
 @Component({
   selector: 'app-detail4',

@@ -1,4 +1,12 @@
-import {AfterContentChecked, AfterViewChecked, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {
+  AfterContentChecked,
+  AfterViewChecked,
+  Component,
+  ElementRef,
+  HostListener,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import {Scooter, ScooterStatus} from '../../../models/scooter';
 import {Subscription} from 'rxjs';
 import {ScootersService} from '../../../services/scooters.service';
@@ -11,6 +19,7 @@ import {ScooterSbServiceService} from '../../../services/scooter-sb-service.serv
   styleUrls: ['./detail5.component.css']
 })
 export class Detail5Component implements OnInit{
+
   public hasChanged: boolean;
   public selectedScooterId = 0;
   public statusesArray = this.statusScooter(ScooterStatus);
@@ -33,6 +42,10 @@ export class Detail5Component implements OnInit{
               public activeRouter: ActivatedRoute) {
   }
 
+
+
+
+
   ngOnInit(): void {
     this.paramsSubscription = this.activeRouter.params.subscribe((params: Params) => {
       this.hasChanged = false;
@@ -46,6 +59,7 @@ export class Detail5Component implements OnInit{
   ngOnDestroy(): void {
     this.paramsSubscription && this.paramsSubscription.unsubscribe();
   }
+
 
 
   /**

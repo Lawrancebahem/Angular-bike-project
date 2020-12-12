@@ -1,6 +1,6 @@
 import {Component, HostListener, OnInit} from '@angular/core';
 import {SessionSbService} from "../../../services/session-sb.service";
-import {CanDeactivateComponent} from "../../../gurads/can-deactivate-component";
+import {CanDeactivateComponent} from "../../../guards/can-deactivate-component";
 
 @Component({
   selector: 'app-nav-bar-sb',

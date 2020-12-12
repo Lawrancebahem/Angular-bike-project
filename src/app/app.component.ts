@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, HostListener, OnDestroy} from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -12,4 +12,10 @@ export class AppComponent{
   constructor() {
   }
 
+  // @HostListener('window:beforeunload', ['$event'])
+  // onWindowClose(event: any): void {
+  //
+  //   event.preventDefault();
+  //   event.returnValue = false;
+  // }
 }

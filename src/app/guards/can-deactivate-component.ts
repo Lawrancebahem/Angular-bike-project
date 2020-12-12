@@ -4,7 +4,8 @@ import {CanDeactivate} from '@angular/router';
 import {HttpClient} from "@angular/common/http";
 
 export interface CanDeactivateComponent {
-  canDeactivate(message?:string):boolean;
+  canDeactivate():boolean;
+
 }
 
 @Injectable()
