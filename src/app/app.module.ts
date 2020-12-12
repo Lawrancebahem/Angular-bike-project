@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/mainpage/header/header.component';
 import { NavBarComponent } from './components/mainpage/nav-bar/nav-bar.component';
-import { FormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { CustomDatePipe } from './components/mainpage/header/custom.datepipe';
 import { AppRoutingModule ,} from './app-routing-module';
 import { HomeComponent } from './components/mainpage/home/home.component';
@@ -28,6 +28,7 @@ import { LoginComponent } from './components/mainpage/login/login.component';
 import { NavBarSbComponent } from './components/mainpage/nav-bar-sb/nav-bar-sb.component';
 import {AuthInterceptorService} from "./services/auth-interceptor.service";
 import { Overview51Component } from './components/scooters/overview51/overview51.component';
+import { Detail51Component } from './components/scooters/detail51/detail51.component';
 
 
 
@@ -54,7 +55,8 @@ import { Overview51Component } from './components/scooters/overview51/overview51
     HeaderSbComponent,
     LoginComponent,
     NavBarSbComponent,
-    Overview51Component
+    Overview51Component,
+    Detail51Component,
     // AutoFocusDirective
   ],
 
@@ -63,7 +65,8 @@ import { Overview51Component } from './components/scooters/overview51/overview51
     FormsModule,
     AppRoutingModule,
     NoopAnimationsModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule
   ],
   providers: [ScootersService ,
     PendingChangesGuard,

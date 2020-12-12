@@ -1,0 +1,49 @@
+<form  #formElement="ngForm">
+
+  <div *ngIf="editedScooter!= null else noScooter"   class="col">
+    <h3>Update scooter {{editedScooter.tag}} ({{-editedScooter.id}} | )</h3>
+
+    <div class="form-group">
+      <label for="tag">Tag</label>
+      <input [(ngModel)]="editedScooter.tag" id="tag" required minlength="10" ngModel class="form-control" name= "tag"  type="text">
+
+    </div>
+
+    <div class="form-group">
+      <label for="status">Status</label>
+      <select [(ngModel)]="allStatuses[editedScooter.status]" id="status" required ngModel class="form-control" name="status" >
+        <option *ngFor="let i of statusesArray"
+                value="{{i}}">
+          {{allStatuses[i]}}</option>
+<!--        [(ngModel)]= "allStatuses[editedScooter.status] === allStatuses[i] ? true : null-->
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="gpsLocation">Gps-Location</label>
+
+      <input [(ngModel)]="editedScooter.gpsLocation" [required]="editedScooter.status === statusesArray[0]"  id="gpsLocation" ngModel class="form-control" name="gpsLocation" type="text">
+
+    </div>
+    <div class="form-group">
+      <label for="mileage">Mileage</label>
+      <input  [(ngModel)]="editedScooter.getMileage"  type="number"  ngModel class="form-control" id="mileage" name="mileage">
+    </div>
+    <div class="form-group">
+      <label for="batteryCharge">Battery Charge</label>
+      <input min="0" max="10" [(ngModel)]="editedScooter.batteryCharge"  type="number" id="batteryCharge" ngModel  class="form-control"  name="batteryCharge">
+    </div>
+
+    <br>
+    <div class="btn-group float-right" role="group" aria-label="Basic example">
+      <Button class="btn btn-primary float-right m-1" (click)="cancel()">Cancel</Button>
+      <Button class="btn btn-primary float-right m-1" (click)="clear()">Clear</Button>
+      <Button [disabled]="!hasChanged" class="btn btn-primary float-right m-1" (click)="reset()">Reset</Button>
+      <Button [disabled]="!hasChanged" class="btn btn-primary float-right m-1" (click)="saveOrUpdate()">Save</Button>
+      <Button [disabled]="hasChanged" class="btn btn-danger float-right m-1" (click)="deleteScooter(selectedScooterId)">Delete</Button>
+    </div>
+  </div>
+
+  <button type="submit" [disabled]="formElement.invalid">click</button>
+</form>
+<ng-template #noScooter><p class="col">Please select a scooter</p></ng-template>

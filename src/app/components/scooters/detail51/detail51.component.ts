@@ -1,25 +1,26 @@
-import {
-  AfterContentChecked,
-  AfterViewChecked,
-  Component,
-  ElementRef,
-  HostListener,
-  OnInit,
-  ViewChild
-} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Scooter, ScooterStatus} from '../../../models/scooter';
 import {Subscription} from 'rxjs';
-import {ScootersService} from '../../../services/scooters.service';
-import {ActivatedRoute, Params, Router} from '@angular/router';
 import {ScooterSbServiceService} from '../../../services/scooter-sb-service.service';
-import {NgForm} from '@angular/forms';
+import {ActivatedRoute, Params, Router} from '@angular/router';
+import {FormControl, FormGroup, NgForm, Validators} from '@angular/forms';
 
 @Component({
-  selector: 'app-detail5',
-  templateUrl: './detail5.component.html',
-  styleUrls: ['./detail5.component.css']
+  selector: 'app-detail51',
+  templateUrl: './detail51.component.html',
+  styleUrls: ['./detail51.component.css']
 })
-export class Detail5Component implements OnInit{
+export class Detail51Component implements OnInit {
+
+  @ViewChild('formElement',{static:false})
+  private detailForm:NgForm;
+
+  // public validationForm = new FormGroup({
+  //   tag: new FormControl('', Validators.required),
+  //   status: new FormControl('', Validators.required),
+  //
+  // })
+
 
   public hasChanged: boolean;
   public selectedScooterId = 0;
@@ -30,20 +31,14 @@ export class Detail5Component implements OnInit{
   private CONFIRM_MESSAGE = 'You have unsaved changes. Do you want to proceed?';
   public paramsSubscription: Subscription;
 
+
   //Input elements
-  @ViewChild('gpsLocationInput') gpsLocationInput: ElementRef;
-  @ViewChild('statusInput') statusInput: ElementRef;
-  @ViewChild('tagInput') tagInput: ElementRef;
-  @ViewChild('mileageInput') mileageInput: ElementRef;
-  @ViewChild('batteryChargeInput') batteryChargeInput: ElementRef;
 
   constructor(public scooterSbServiceService: ScooterSbServiceService,
               public route: Router,
               public activeRouter: ActivatedRoute) {
+
   }
-
-
-
 
 
   ngOnInit(): void {
@@ -52,15 +47,15 @@ export class Detail5Component implements OnInit{
       this.selectedScooterId = Number(params['id']);
       if (this.selectedScooterId > -1){
         this.getScooterById();
+
       }
     });
+
   }
 
   ngOnDestroy(): void {
     this.paramsSubscription && this.paramsSubscription.unsubscribe();
   }
-
-
 
   /**
    * Delete a scooter using its id
@@ -80,6 +75,9 @@ export class Detail5Component implements OnInit{
   public getScooterById(){
     this.scooterSbServiceService.findById(this.selectedScooterId).subscribe((scooter)=>{
       this.editedScooter = Scooter.trueCopy(scooter);
+      console.log(this.editedScooter.status +"   " + scooter.status)
+      console.log(scooter)
+
     },error => {
       console.log(error.error.message)
       this.editedScooter = null;
@@ -107,11 +105,11 @@ export class Detail5Component implements OnInit{
   public reset(): void {
     const confirmChanges = confirm(this.CONFIRM_MESSAGE);
     if (this.hasChanged && confirmChanges) {
-      this.tagInput.nativeElement.value = this.editedScooter.tag;
-      this.gpsLocationInput.nativeElement.value = this.editedScooter.gpsLocation;
-      this.mileageInput.nativeElement.value = this.editedScooter.getMileage;
-      this.batteryChargeInput.nativeElement.value = this.editedScooter.batteryCharge;
-      this.statusInput.nativeElement.value = this.editedScooter.status;
+      // this.tagInput.nativeElement.value = this.editedScooter.tag;
+      // this.gpsLocationInput.nativeElement.value = this.editedScooter.gpsLocation;
+      // this.mileageInput.nativeElement.value = this.editedScooter.getMileage;
+      // this.batteryChargeInput.nativeElement.value = this.editedScooter.batteryCharge;
+      // this.statusInput.nativeElement.value = this.editedScooter.status;
       this.hasChanged = false;
     }
   }
@@ -122,11 +120,11 @@ export class Detail5Component implements OnInit{
   clear(): void {
     const confirmChanges = this.hasChanged ? confirm(this.CONFIRM_MESSAGE) : confirm('Are you sure you want to clear all fields?');
     if (confirmChanges) {
-      this.tagInput.nativeElement.value = '';
-      this.gpsLocationInput.nativeElement.value = '';
-      this.mileageInput.nativeElement.value = '';
-      this.batteryChargeInput.nativeElement.value = '';
-      this.statusInput.nativeElement.value = '';
+      // this.tagInput.nativeElement.value = '';
+      // this.gpsLocationInput.nativeElement.value = '';
+      // this.mileageInput.nativeElement.value = '';
+      // this.batteryChargeInput.nativeElement.value = '';
+      // this.statusInput.nativeElement.value = '';
     }
   }
 
@@ -157,14 +155,16 @@ export class Detail5Component implements OnInit{
    */
   private getInputFieldsValues(): Scooter {
     if (this.selectedScooterId != null) {
-      let tag = this.tagInput.nativeElement.value;
-      let gpsLocation = this.gpsLocationInput.nativeElement.value;
-      let mileage = this.mileageInput.nativeElement.value;
-      let batteryCharge = this.batteryChargeInput.nativeElement.value;
-      let status = this.statusInput.nativeElement.value;
+      // let tag = this.tagInput.nativeElement.value;
+      // let gpsLocation = this.gpsLocationInput.nativeElement.value;
+      // let mileage = this.mileageInput.nativeElement.value;
+      // let batteryCharge = this.batteryChargeInput.nativeElement.value;
+      // let status = this.statusInput.nativeElement.value;
       // @ts-ignore
       let statusScooter: ScooterStatus = ScooterStatus[status];
-      return new Scooter(this.selectedScooterId, tag, statusScooter, gpsLocation, mileage, batteryCharge);
+      // return new Scooter(this.selectedScooterId, tag, statusScooter, gpsLocation, mileage, batteryCharge);
+
+      return null;
     }
   }
 
@@ -202,5 +202,9 @@ export class Detail5Component implements OnInit{
       // are considered equivalent
       return true;
     }
+  }
+
+  cons() {
+
   }
 }
