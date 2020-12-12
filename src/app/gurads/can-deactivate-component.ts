@@ -10,10 +10,10 @@ export interface CanDeactivateComponent {
 @Injectable()
 export class PendingChangesGuard implements CanDeactivate<CanDeactivateComponent>{
 
-  constructor(public message?:string) {
+  constructor() {
   }
 
   canDeactivate(component: CanDeactivateComponent) {
-    return !component.canDeactivate() ? true: confirm(this.message ||"You have unsaved changes, are you sure you want to discard?")
+    return !component.canDeactivate() ? true: confirm("You have unsaved changes, are you sure you want to discard?")
   }
 }
