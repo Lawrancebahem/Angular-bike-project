@@ -13,13 +13,7 @@ import {FormControl, FormGroup, NgForm, Validators} from '@angular/forms';
 export class Detail51Component implements OnInit {
 
   @ViewChild('formElement',{static:false})
-  private detailForm:NgForm;
-
-  // public validationForm = new FormGroup({
-  //   tag: new FormControl('', Validators.required),
-  //   status: new FormControl('', Validators.required),
-  //
-  // })
+  public detailForm:NgForm;
 
 
   public hasChanged: boolean;
@@ -32,7 +26,6 @@ export class Detail51Component implements OnInit {
   public paramsSubscription: Subscription;
 
 
-  //Input elements
 
   constructor(public scooterSbServiceService: ScooterSbServiceService,
               public route: Router,
@@ -47,7 +40,6 @@ export class Detail51Component implements OnInit {
       this.selectedScooterId = Number(params['id']);
       if (this.selectedScooterId > -1){
         this.getScooterById();
-
       }
     });
 
@@ -69,14 +61,13 @@ export class Detail51Component implements OnInit {
     }
   }
 
+
   /**
    * Get a scooter by its id
    */
   public getScooterById(){
     this.scooterSbServiceService.findById(this.selectedScooterId).subscribe((scooter)=>{
       this.editedScooter = Scooter.trueCopy(scooter);
-      console.log(this.editedScooter.status +"   " + scooter.status)
-      console.log(scooter)
 
     },error => {
       console.log(error.error.message)
@@ -104,13 +95,17 @@ export class Detail51Component implements OnInit {
    */
   public reset(): void {
     const confirmChanges = confirm(this.CONFIRM_MESSAGE);
-    if (this.hasChanged && confirmChanges) {
-      // this.tagInput.nativeElement.value = this.editedScooter.tag;
-      // this.gpsLocationInput.nativeElement.value = this.editedScooter.gpsLocation;
-      // this.mileageInput.nativeElement.value = this.editedScooter.getMileage;
-      // this.batteryChargeInput.nativeElement.value = this.editedScooter.batteryCharge;
-      // this.statusInput.nativeElement.value = this.editedScooter.status;
-      this.hasChanged = false;
+    if (confirmChanges) {
+      this.scooterSbServiceService.findById(this.selectedScooterId).subscribe((response)=>{
+        const scooter:Scooter  = Scooter.trueCopy(response);
+        this.editedScooter.tag = scooter.tag;
+        this.editedScooter.status = scooter.status;
+        this.editedScooter.gpsLocation = scooter.gpsLocation;
+        this.editedScooter.id = scooter.id;
+        this.editedScooter.batteryCharge = scooter.batteryCharge;
+        this.editedScooter.getMileage = scooter.getMileage;
+      })
+
     }
   }
 
@@ -120,11 +115,13 @@ export class Detail51Component implements OnInit {
   clear(): void {
     const confirmChanges = this.hasChanged ? confirm(this.CONFIRM_MESSAGE) : confirm('Are you sure you want to clear all fields?');
     if (confirmChanges) {
-      // this.tagInput.nativeElement.value = '';
-      // this.gpsLocationInput.nativeElement.value = '';
-      // this.mileageInput.nativeElement.value = '';
-      // this.batteryChargeInput.nativeElement.value = '';
-      // this.statusInput.nativeElement.value = '';
+
+      this.detailForm.controls['tag'].setValue('')
+      this.detailForm.controls['status'].setValue('');
+      this.detailForm.controls['gpsLocation'].setValue('');
+      this.detailForm.controls['gpsLocation'].setValue('');
+      this.detailForm.controls['mileage'].setValue('');
+      this.detailForm.controls['batteryCharge'].setValue('');
     }
   }
 
@@ -154,20 +151,13 @@ export class Detail51Component implements OnInit {
    * @private
    */
   private getInputFieldsValues(): Scooter {
+    const scooter:Scooter = {id:0,...this.detailForm.value};
     if (this.selectedScooterId != null) {
-      // let tag = this.tagInput.nativeElement.value;
-      // let gpsLocation = this.gpsLocationInput.nativeElement.value;
-      // let mileage = this.mileageInput.nativeElement.value;
-      // let batteryCharge = this.batteryChargeInput.nativeElement.value;
-      // let status = this.statusInput.nativeElement.value;
-      // @ts-ignore
-      let statusScooter: ScooterStatus = ScooterStatus[status];
-      // return new Scooter(this.selectedScooterId, tag, statusScooter, gpsLocation, mileage, batteryCharge);
-
-      return null;
+      scooter.id = this.selectedScooterId;
+      scooter.status = this.statusesArray[scooter.status];
+      return scooter;
     }
   }
-
   /**
    * Return a generic type enum
    * @param enumOb
@@ -195,6 +185,7 @@ export class Detail51Component implements OnInit {
         // If values of same property are not equal,
         // objects are not equivalent
         if (scooter1[propName] !== scooter2[propName]) {
+          console.log('Not equal')
           return false;
         }
       }
@@ -204,7 +195,4 @@ export class Detail51Component implements OnInit {
     }
   }
 
-  cons() {
-
-  }
 }

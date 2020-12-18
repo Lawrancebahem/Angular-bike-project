@@ -5,15 +5,15 @@
 
     <div class="form-group">
       <label for="tag">Tag</label>
-      <input [(ngModel)]="editedScooter.tag" id="tag" required minlength="10" ngModel class="form-control" name= "tag"  type="text">
+      <input  ngModel #tagInpunt [ngClass]="[!(tagInpunt.value.length >= 10) ? 'red-background':'green-background']"  [(ngModel)]="editedScooter.tag" id="tag" [required]="true"  minlength="10" class="form-control" name= "tag"  type="text">
 
     </div>
 
     <div class="form-group">
       <label for="status">Status</label>
-      <select [(ngModel)]="allStatuses[editedScooter.status]" id="status" required ngModel class="form-control" name="status" >
-        <option *ngFor="let i of statusesArray"
-                value="{{i}}">
+      <select  [(ngModel)]="editedScooter.status" id="status" ngModel  [required]="true" class="form-control" name="status" >
+        <option  *ngFor="let i of statusesArray"
+                value="{{allStatuses[i]}}">
           {{allStatuses[i]}}</option>
 <!--        [(ngModel)]= "allStatuses[editedScooter.status] === allStatuses[i] ? true : null-->
       </select>
@@ -22,28 +22,31 @@
     <div class="form-group">
       <label for="gpsLocation">Gps-Location</label>
 
-      <input [(ngModel)]="editedScooter.gpsLocation" [required]="editedScooter.status === statusesArray[0]"  id="gpsLocation" ngModel class="form-control" name="gpsLocation" type="text">
-
+      <input #location [ngClass]="[(editedScooter.status === allStatuses[0] && location.value.length === 0) ? 'red-background':'green-background']" [(ngModel)]="editedScooter.gpsLocation" ngModel [required]="editedScooter.status === allStatuses[0]"  id="gpsLocation" class="form-control" name="gpsLocation" type="text">
     </div>
     <div class="form-group">
       <label for="mileage">Mileage</label>
-      <input  [(ngModel)]="editedScooter.getMileage"  type="number"  ngModel class="form-control" id="mileage" name="mileage">
+      <input #mileage [ngClass]="[(mileage.value.length == 0) ? 'red-background':'green-background']"  [(ngModel)]="editedScooter.getMileage" ngModel required type="number"  class="form-control" id="mileage" name="mileage">
     </div>
     <div class="form-group">
       <label for="batteryCharge">Battery Charge</label>
-      <input min="0" max="10" [(ngModel)]="editedScooter.batteryCharge"  type="number" id="batteryCharge" ngModel  class="form-control"  name="batteryCharge">
+      <input  #batteryCharge [ngClass]="[!(batteryCharge.value >=0 && batteryCharge.value <=100)
+      ||batteryCharge.value.length == 0  ? 'red-background':'green-background']"
+              pattern="([0-9]|[1-9][0-9]|100)" ngModel required
+             [(ngModel)]="editedScooter.batteryCharge"
+             type="number" id="batteryCharge"
+             class="form-control"  name="batteryCharge">
     </div>
 
     <br>
     <div class="btn-group float-right" role="group" aria-label="Basic example">
       <Button class="btn btn-primary float-right m-1" (click)="cancel()">Cancel</Button>
       <Button class="btn btn-primary float-right m-1" (click)="clear()">Clear</Button>
-      <Button [disabled]="!hasChanged" class="btn btn-primary float-right m-1" (click)="reset()">Reset</Button>
-      <Button [disabled]="!hasChanged" class="btn btn-primary float-right m-1" (click)="saveOrUpdate()">Save</Button>
-      <Button [disabled]="hasChanged" class="btn btn-danger float-right m-1" (click)="deleteScooter(selectedScooterId)">Delete</Button>
+      <Button  class="btn btn-primary float-right m-1" (click)="reset()">Reset</Button>
+      <Button [disabled]="detailForm.invalid"  class="btn btn-primary float-right m-1" (click)="saveOrUpdate()">Save</Button>
+      <Button  class="btn btn-danger float-right m-1" (click)="deleteScooter(selectedScooterId)">Delete</Button>
     </div>
   </div>
 
-  <button type="submit" [disabled]="formElement.invalid">click</button>
 </form>
 <ng-template #noScooter><p class="col">Please select a scooter</p></ng-template>
