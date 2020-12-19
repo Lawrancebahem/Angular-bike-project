@@ -49,6 +49,7 @@ export class Overview51Component implements OnInit {
    */
   public addRandomWithFocusSelection() {
     this.selectedScooter = Scooter.createRandomScooter();
+    this.selectedScooter.id = 0;
     const scooterStatus:any = ScooterStatus[this.selectedScooter.status];
     this.selectedScooter.status = scooterStatus;
     this.router.navigate([this.selectedScooter.id],{relativeTo:this.activeRoute});

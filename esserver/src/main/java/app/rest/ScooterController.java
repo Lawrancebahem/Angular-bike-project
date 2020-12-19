@@ -36,7 +36,7 @@ import java.util.List;
 public class ScooterController {
 
   @Autowired
-//  @Qualifier("scooterRepositoryJpa")
+  @Qualifier("scooterRepositoryJpa")
   private EntityRepository<Scooter> scooterRepository;
 
   @Autowired
@@ -82,7 +82,7 @@ public class ScooterController {
     System.out.println("the toke is " + encryptedToken);
     if (encryptedToken == null) throw new AuthenticationException("You need to log in");
     Scooter foundScooter = scooterRepository.findById(id);
-    if (foundScooter == null) throw new ResourceNotFound("The id does not exist");
+    if (foundScooter == null && id != 0) throw new ResourceNotFound("The id does not exist");
     return foundScooter;
   }
 
@@ -107,6 +107,8 @@ public class ScooterController {
   public boolean deleteScooter(@PathVariable int id) {
     Scooter foundScooter = scooterRepository.findById(id);
     if (foundScooter == null) throw new ResourceNotFound("The id does not exist");
+    foundScooter.getTrips().clear();
+    this.scooterRepository.save(foundScooter);
     return this.scooterRepository.deleteById(id);
   }
 

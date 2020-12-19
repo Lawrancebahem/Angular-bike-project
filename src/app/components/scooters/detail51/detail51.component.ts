@@ -15,7 +15,6 @@ export class Detail51Component implements OnInit {
   @ViewChild('formElement',{static:false})
   public detailForm:NgForm;
 
-
   public hasChanged: boolean;
   public selectedScooterId = 0;
   public statusesArray = this.statusScooter(ScooterStatus);
@@ -57,6 +56,7 @@ export class Detail51Component implements OnInit {
     const confirmChanges = confirm(this.CONFIRM_MESSAGE);
     if (confirmChanges) {
       this.deletedScooter = this.scooterSbServiceService.deleteById(id);
+      this.editedScooter = null;
       return this.deletedScooter;
     }
   }
@@ -151,12 +151,11 @@ export class Detail51Component implements OnInit {
    * @private
    */
   private getInputFieldsValues(): Scooter {
-    const scooter:Scooter = {id:0,...this.detailForm.value};
-    if (this.selectedScooterId != null) {
+    let scooter:Scooter = Scooter.trueCopy(this.detailForm.value);
+    if (this.selectedScooterId > -1) {
       scooter.id = this.selectedScooterId;
-      scooter.status = this.statusesArray[scooter.status];
-      return scooter;
     }
+    return scooter;
   }
   /**
    * Return a generic type enum

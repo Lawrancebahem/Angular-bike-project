@@ -1,4 +1,4 @@
-<form  #formElement="ngForm">
+<form  #formElement="ngForm" (keydown.enter)="$event.preventDefault()">
 
   <div *ngIf="editedScooter!= null else noScooter"   class="col">
     <h3>Update scooter {{editedScooter.tag}} ({{-editedScooter.id}} | )</h3>
@@ -32,7 +32,8 @@
       <label for="batteryCharge">Battery Charge</label>
       <input  #batteryCharge [ngClass]="[!(batteryCharge.value >=0 && batteryCharge.value <=100)
       ||batteryCharge.value.length == 0  ? 'red-background':'green-background']"
-              pattern="([0-9]|[1-9][0-9]|100)" ngModel required
+              pattern="^[1-9]$|^[1-9][0-9]$|^(100)$"
+              ngModel required
              [(ngModel)]="editedScooter.batteryCharge"
              type="number" id="batteryCharge"
              class="form-control"  name="batteryCharge">

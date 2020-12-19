@@ -70,6 +70,7 @@ export class Detail5Component implements OnInit{
     const confirmChanges = confirm(this.CONFIRM_MESSAGE);
     if (confirmChanges) {
       this.deletedScooter = this.scooterSbServiceService.deleteById(id);
+      this.editedScooter = null;
       return this.deletedScooter;
     }
   }

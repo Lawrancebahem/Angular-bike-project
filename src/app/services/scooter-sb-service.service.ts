@@ -19,9 +19,8 @@ export class ScooterSbServiceService {
     this.restGetScooters();
   }
 
-  // TO-DO: Return previous scooter else null
   save(scooter: Scooter): Observable<Scooter> {
-    let foundScooter = this.scooters.find(scooter => scooter.id = scooter.id);
+    let foundScooter = this.scooters.find(s => s.id === scooter.id);
     if (foundScooter != null) {
       this.scooters.splice(this.scooters.indexOf(foundScooter), 1, scooter);
       return this.resPutScooter(scooter);
@@ -43,7 +42,7 @@ export class ScooterSbServiceService {
 
 
   deleteById(id) {
-    let foundScooter = this.scooters.find(scooter => scooter.id = id);
+    let foundScooter = this.scooters.find(s => s.id === id);
     if (foundScooter != null) {
       this.scooters.splice(this.scooters.indexOf(foundScooter), 1);
       this.resDeleteScooter(id);
